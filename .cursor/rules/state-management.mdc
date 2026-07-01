@@ -1,0 +1,18 @@
+---
+description: Riverpod 3 状态管理（代码生成）规范
+globs: lib/**/controllers/**/*.dart,lib/**/providers/**/*.dart,lib/core/providers/**/*.dart,lib/**/presentation/**/*.dart
+alwaysApply: false
+---
+
+# 状态管理（Riverpod 3 · 代码生成）
+
+- 统一 `@riverpod` 注解 + build_runner；不手写 `StateProvider/StateNotifierProvider`。
+- 异步可变状态用 `@riverpod class Xxx extends _$Xxx` 返回 `Future<T>`；依赖注入/派生用函数式 provider。
+- 异步状态用 `AsyncValue`，修改用 `AsyncValue.guard`；UI 用 `.when(...)` 渲染。
+- `build` 内用 `ref.watch`；回调用 `ref.read`；副作用（导航/SnackBar）用 `ref.listen`。
+- 入口包 `ProviderScope`；资源用 `ref.onDispose` 释放；用 `.select` 缩小重建。
+- 文件顶部声明 `part "xxx.g.dart";`，改后跑 build_runner。
+
+详见：`agent/flutter-best-practices/04-state-management.md`
+
+@agent/flutter-best-practices/04-state-management.md

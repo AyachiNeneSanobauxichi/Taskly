@@ -1,0 +1,17 @@
+---
+description: build_runner 代码生成规范（Freezed/JSON/Riverpod）
+globs: lib/**/*.g.dart,lib/**/*.freezed.dart
+alwaysApply: false
+---
+
+# 代码生成（build_runner）
+
+- 改了 `@freezed`/`@JsonSerializable`/`@riverpod` 的文件后，运行：
+  `dart run build_runner build --delete-conflicting-outputs`（开发期可 `watch`）。
+- 使用注解的文件顶部必须声明对应 `part`（`*.freezed.dart` / `*.g.dart`）。
+- 生成文件不手改、不加入 `.gitignore`（入库保证 CI 可编译）。
+- 冲突/幽灵错误：`dart run build_runner clean` 后重跑。
+
+详见：`agent/flutter-best-practices/12-code-generation.md`
+
+@agent/flutter-best-practices/12-code-generation.md

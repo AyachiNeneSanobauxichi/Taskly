@@ -1,0 +1,31 @@
+---
+description: Flutter 项目核心规范（技术栈、核心原则、结构、命名、Git）——始终生效
+globs:
+alwaysApply: true
+---
+
+# Flutter 核心规范（todo_app_v1）
+
+> 权威来源在 `agent/flutter-best-practices/`。本规则为红线摘要 + 指针，详细内容见引用文档。
+
+## 首要红线
+- 字符串用**双引号** `"..."`（`prefer_double_quotes: true`）。
+- 状态管理只用 **Riverpod 3 `@riverpod` 代码生成**；数据模型只用 **Freezed 3**。
+- 改了 freezed/json/riverpod 注解后**必须**跑 `dart run build_runner build --delete-conflicting-outputs`。
+- **feature-first + 分层**：`data / domain / controllers / screens / widgets`，依赖单向向下，domain 不依赖 data。
+- 网络只通过 `core/network/DioClient`；错误链路 `AppException → Failure → AsyncValue`。
+- 每个目录维护 `index.dart` barrel，对外只经 barrel 引用。
+- 禁止 `print`（用 `AppLogger`）。提交前 `dart format` + `flutter analyze`（零告警）+ `flutter test`。
+
+## 技术栈
+Riverpod 3 / Dio 5 / Freezed 3 / go_router 17 / flutter_dotenv / logger / intl。Dart `^3.10`，使用现代语法（records/patterns/sealed/switch 表达式）。
+
+## 详细文档（按需阅读）
+- 总览与原则: `agent/flutter-best-practices/00-overview.md`
+- 项目结构: `agent/flutter-best-practices/01-project-structure.md`
+- 架构分层: `agent/flutter-best-practices/02-architecture.md`
+- 命名规范: `agent/flutter-best-practices/03-naming-conventions.md`
+- Git 与质量门禁: `agent/flutter-best-practices/15-git-and-quality.md`
+- 全部模块索引: `agent/flutter-best-practices/README.md`
+
+@agent/flutter-best-practices/00-overview.md

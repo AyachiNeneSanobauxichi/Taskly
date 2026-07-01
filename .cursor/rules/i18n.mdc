@@ -1,0 +1,16 @@
+---
+description: 国际化规范（intl，文案/日期/数字/复数）
+globs: lib/**/screens/**/*.dart,lib/**/widgets/**/*.dart,lib/l10n/**/*
+alwaysApply: false
+---
+
+# 国际化（intl）
+
+- 用户可见文案不硬编码，走本地化资源（key 语义化）。
+- 日期用 `DateFormat`、数字/货币用 `NumberFormat`（跟随 locale），不手拼格式。
+- 复数/性别用 `Intl.plural`/`Intl.select`，带变量的句子用占位符，不用字符串拼接。
+- `MaterialApp` 配 `localizationsDelegates` 与 `supportedLocales`。
+
+详见：`agent/flutter-best-practices/11-i18n-localization.md`
+
+@agent/flutter-best-practices/11-i18n-localization.md

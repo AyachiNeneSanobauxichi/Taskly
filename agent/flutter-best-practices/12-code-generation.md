@@ -1,0 +1,54 @@
+# 12 · 代码生成（build_runner）
+
+> Freezed / json_serializable / Riverpod 均依赖 `build_runner`。生成文件（`*.g.dart` / `*.freezed.dart`）**不手改、不入 review 关注点，但需入库**（保证 CI/他人可编译）。
+
+## 何时需要重新生成
+
+- 新增/修改带 `@freezed` 的类。
+- 新增/修改带 `@JsonSerializable` / `fromJson` 的类。
+- 新增/修改带 `@riverpod` 的 provider/notifier。
+
+## 常用命令
+
+```bash
+# 一次性生成（推荐加 --delete-conflicting-outputs 清理旧产物）
+dart run build_runner build --delete-conflicting-outputs
+
+# 开发期监听自动生成
+dart run build_runner watch --delete-conflicting-outputs
+
+# 清理生成缓存
+dart run build_runner clean
+```
+
+## ✅ 应该
+
+- 每个使用注解的文件顶部声明对应 `part`：
+  - Freezed：`part "xxx.freezed.dart";`
+  - JSON：`part "xxx.g.dart";`
+  - Riverpod：`part "xxx.g.dart";`
+- 改完注解**立即** `build_runner build` 再继续，避免编译报错误导。
+- 生成产物**提交入库**（CI 环境可直接编译，减少构建时长与不确定性）。
+- 遇到冲突/幽灵错误：`build_runner clean` 后重跑。
+
+## ❌ 避免
+
+- ❌ 手改 `*.g.dart` / `*.freezed.dart`。
+- ❌ 忘记加 `part` 导致找不到 `_$Xxx`。
+- ❌ 在一个文件同时缺失 freezed 与 json 的 `part` 声明。
+- ❌ 把生成产物加入 `.gitignore`（除非团队约定 CI 生成）。
+
+## 📌 一个文件的完整注解头示例
+
+```dart
+import "package:freezed_annotation/freezed_annotation.dart";
+
+part "todo_dto.freezed.dart";
+part "todo_dto.g.dart";
+
+@freezed
+abstract class TodoDto with _$TodoDto {
+  const factory TodoDto({required String id, required String title}) = _TodoDto;
+  factory TodoDto.fromJson(Map<String, dynamic> json) => _$TodoDtoFromJson(json);
+}
+```

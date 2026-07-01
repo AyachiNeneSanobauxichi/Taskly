@@ -1,0 +1,17 @@
+---
+description: 主题与 UI/Widget 规范（Material 3、const、复用、无障碍）
+globs: lib/theme/**/*.dart,lib/widgets/**/*.dart,lib/**/widgets/**/*.dart,lib/**/screens/**/*.dart,lib/**/presentation/**/*.dart
+alwaysApply: false
+---
+
+# 主题与 UI
+
+- 颜色/间距/文本样式集中定义，经 `Theme.of(context)` 取值，不散落魔法值；用 Material 3 + light/dark。
+- 组件拆分为小 Widget（class 优先），静态子树 `const` 化；业务逻辑不写进 Widget。
+- 列表用 `ListView.builder`/`Sliver` 懒加载并给稳定 `key`；网络图用 `CachedNetworkImage` + placeholder/error。
+- 响应式用 `LayoutBuilder`/`MediaQuery`，不写死像素；交互控件加语义/tooltip，可点区 ≥48dp。
+- 复用组件下沉到 `lib/widgets/`（全局）或 feature 的 `widgets/`（私有）。
+
+详见：`agent/flutter-best-practices/09-theming-ui.md`、性能见 `agent/flutter-best-practices/14-performance.md`
+
+@agent/flutter-best-practices/09-theming-ui.md

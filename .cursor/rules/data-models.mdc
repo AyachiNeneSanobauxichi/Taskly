@@ -1,0 +1,17 @@
+---
+description: Freezed 3 数据模型与 JSON 序列化规范
+globs: lib/**/domain/**/*.dart,lib/**/*_dto.dart,lib/**/*_model.dart,lib/**/*.freezed.dart
+alwaysApply: false
+---
+
+# 数据模型（Freezed 3 + json_serializable）
+
+- 所有数据结构用 Freezed：单构造用 `@freezed abstract class`，多态/状态机用 `@freezed sealed class`。
+- 需要 JSON 时加 `fromJson`/`toJson` 并声明 `part "xxx.g.dart";` + `part "xxx.freezed.dart";`。
+- DTO 贴合接口字段（`@JsonKey` 处理命名差异），提供 `toEntity()` 映射到 domain Entity。
+- 枚举用 `@JsonValue` 映射并给 `unknown` 兜底；不手写 `copyWith/==/hashCode`；不手改生成文件。
+- 消费 sealed union 用 `switch` 表达式（编译期穷尽检查）。
+
+详见：`agent/flutter-best-practices/06-data-models.md`
+
+@agent/flutter-best-practices/06-data-models.md

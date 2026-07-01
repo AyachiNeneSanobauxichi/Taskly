@@ -1,0 +1,17 @@
+---
+description: Dio 网络层规范（DioClient、拦截器、断网、超时）
+globs: lib/**/data/**/*.dart,lib/core/network/**/*.dart
+alwaysApply: false
+---
+
+# 网络层（Dio）
+
+- 全局单一 `Dio` 实例，经 `dioClientProvider` 复用；baseUrl/超时/header 从 `Env`(.env) 读取。
+- 拦截器分工：`AuthInterceptor`（token/401）、`ErrorInterceptor`（DioException→AppException）、debug 下 `PrettyDioLogger`。
+- Repository 负责把响应解析成 Entity；DataSource 只发原始请求，不透传 `Response.data` 到 UI。
+- 长请求用 `CancelToken`，页面销毁取消；请求前用 `connectivity_plus` 检测断网。
+- 禁止在 UI/controller `new Dio()`；禁止空 catch 吞异常；生产不打印完整请求体。
+
+详见：`agent/flutter-best-practices/05-networking.md`
+
+@agent/flutter-best-practices/05-networking.md

@@ -1,0 +1,16 @@
+---
+description: 存储、环境配置与安全（.env、安全存储、日志）
+globs: lib/core/storage/**/*.dart,lib/core/config/**/*.dart,lib/core/utils/**/*.dart
+alwaysApply: false
+---
+
+# 存储 / 配置 / 安全
+
+- 环境变量走 `.env` + `Env` 封装（集中读取、带默认值）；`.env`/`.env.*` 入 `.gitignore`，提供 `.env.example`。
+- 敏感数据（token 等）走安全存储（Keychain/Keystore），封装 `SecureStorage`；登出清空。
+- 禁止用 `SharedPreferences` 存 token；禁止把敏感数据写进日志或代码。
+- 日志统一 `AppLogger`（分级、debug 输出、不含 PII）；禁止 `print`。
+
+详见：`agent/flutter-best-practices/10-storage-security.md`
+
+@agent/flutter-best-practices/10-storage-security.md

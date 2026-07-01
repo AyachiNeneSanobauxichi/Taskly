@@ -1,0 +1,17 @@
+---
+description: 分层错误处理规范（AppException → Failure → AsyncValue）
+globs: lib/core/error/**/*.dart,lib/**/data/**/*.dart,lib/**/controllers/**/*.dart
+alwaysApply: false
+---
+
+# 错误处理
+
+- 分层模型：底层抛 `AppException`（技术异常）→ Repository 转 `Failure`（含展示文案）→ UI 用 `AsyncValue.error` 渲染。
+- 用户只看到友好文案（`Failure.displayMessage`），不暴露堆栈/`DioException`。
+- 禁止空 catch 吞异常、禁止用 `null` 表达失败。
+- 可恢复错误提供重试（`ref.invalidate`）。
+- `main` 设置 `FlutterError.onError` 与 `PlatformDispatcher.onError` 统一记日志。
+
+详见：`agent/flutter-best-practices/08-error-handling.md`
+
+@agent/flutter-best-practices/08-error-handling.md

@@ -1,0 +1,17 @@
+---
+description: 分层架构（Clean Architecture + feature-first）与目录结构约定
+globs: lib/features/**/*.dart,lib/app/**/*.dart,lib/shared/**/*.dart
+alwaysApply: false
+---
+
+# 架构与结构
+
+- 分层职责：`screens/widgets`（UI）→ `controllers`（表现逻辑）→ `domain`（实体+Repository 抽象）←`data`（实现+DTO）。
+- 依赖单向向下；`domain` 纯净（无 dio/flutter/json）；`data` 实现 `domain` 抽象，通过 provider 注入。
+- DTO 与 Entity 分离，`data` 层做 `toEntity()` 映射。
+- 跨功能能力放 `core/`（基础设施）与 `shared/`（业务无关）。
+- 每个目录维护 `index.dart` barrel；feature 间不直接 import 内部实现。
+
+详见：`agent/flutter-best-practices/01-project-structure.md`、`agent/flutter-best-practices/02-architecture.md`
+
+@agent/flutter-best-practices/02-architecture.md

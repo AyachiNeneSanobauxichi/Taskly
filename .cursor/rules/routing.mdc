@@ -1,0 +1,17 @@
+---
+description: go_router 17 路由规范
+globs: lib/app/router/**/*.dart,lib/**/screens/**/*.dart
+alwaysApply: false
+---
+
+# 路由（go_router 17）
+
+- 路由名/路径集中为常量（`RouteName`/`RoutePath`）；跳转只用 `goNamed/pushNamed` + 常量，不写裸字符串。
+- `GoRouter` 由 provider 暴露，鉴权用 `redirect`（集中在 `route_guard.dart`），配 `errorBuilder`。
+- `app.dart` 用 `MaterialApp.router(routerConfig: ...)`。
+- 参数用 `pathParameters/queryParameters`；`extra` 只传运行期对象，不用于深链接必需数据。
+- 不用 `Navigator.push(MaterialPageRoute)` 绕过 go_router。
+
+详见：`agent/flutter-best-practices/07-routing.md`
+
+@agent/flutter-best-practices/07-routing.md

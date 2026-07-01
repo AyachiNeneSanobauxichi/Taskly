@@ -1,0 +1,16 @@
+---
+description: 测试规范（单元/Widget，Riverpod override）
+globs: test/**/*.dart
+alwaysApply: false
+---
+
+# 测试
+
+- 测试镜像 `lib/` 结构，命名 `<被测>_test.dart`；金字塔：单元 > Widget > 集成。
+- Riverpod 测试用 `ProviderContainer`/`ProviderScope` + `overrides` 注入 mock repository。
+- AAA 结构（Arrange/Act/Assert），一个测试验证一件事；mock 边界（网络/存储），不打真实后端。
+- 单元测试覆盖 Repository 映射、Failure 转换、纯函数；CI 跑 `flutter test --coverage`。
+
+详见：`agent/flutter-best-practices/13-testing.md`
+
+@agent/flutter-best-practices/13-testing.md
