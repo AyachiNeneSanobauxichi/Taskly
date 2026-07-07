@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:todo_app_v1/features/auth/index.dart";
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -6,6 +7,11 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    final nameController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
 
     return Scaffold(
       body: SafeArea(
@@ -44,7 +50,7 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(height: 8),
 
               Text(
-                "开始管你的胖猪姜来",
+                "开始管理你的任务",
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -52,56 +58,37 @@ class RegisterScreen extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "用户名",
-                  prefixIcon: Icon(Icons.person_outline),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+              AuthInput(
+                label: "用户名",
+                icon: Icons.person_outline,
+                controller: nameController,
+                autofillHints: [AutofillHints.newPassword],
               ),
 
               const SizedBox(height: 16),
 
-              TextField(
+              AuthInput(
+                label: "邮箱",
+                icon: Icons.mail_outline,
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: "邮箱",
-                  prefixIcon: const Icon(Icons.mail_outline),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+                autofillHints: [AutofillHints.email],
               ),
 
               const SizedBox(height: 16),
 
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "密码",
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: const Icon(Icons.visibility_off_outlined),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+              AuthPassword(
+                label: "密码",
+                controller: passwordController,
+                autofillHints: [AutofillHints.newPassword],
               ),
 
               const SizedBox(height: 16),
 
-              // ⑥ 确认密码
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "确认密码",
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: const Icon(Icons.visibility_off_outlined),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+              AuthPassword(
+                label: "确认密码",
+                controller: confirmPasswordController,
+                autofillHints: [AutofillHints.newPassword],
               ),
 
               const SizedBox(height: 16),
@@ -121,7 +108,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                           const TextSpan(text: "和"),
                           TextSpan(
-                            text: "猪猪猪",
+                            text: "《隐私政策》",
                             style: TextStyle(color: theme.colorScheme.primary),
                           ),
                         ],

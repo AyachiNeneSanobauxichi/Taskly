@@ -17,6 +17,7 @@ abstract final class WsyAppTheme {
       colorScheme: wsyColorScheme,
       scaffoldBackgroundColor: WsyAppColors.background,
       textTheme: WsyAppTextStyles.lightTextTheme,
+      inputDecorationTheme: _inputDecorationTheme(),
       dividerTheme: const DividerThemeData(
         color: WsyAppColors.border,
         thickness: 1,
@@ -40,13 +41,21 @@ abstract final class WsyAppTheme {
       colorScheme: wsyColorScheme,
       scaffoldBackgroundColor: WsyAppColors.darkBackground,
       textTheme: WsyAppTextStyles.darkTextTheme,
-      // inputDecorationTheme: _inputDecorationTheme(colorScheme),
+      inputDecorationTheme: _inputDecorationTheme(),
       // filledButtonTheme: _filledButtonTheme,
       dividerTheme: const DividerThemeData(
         color: WsyAppColors.darkSurface,
         thickness: 1,
       ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
+    );
+  }
+
+  static InputDecorationTheme _inputDecorationTheme() {
+    return InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(WsyAppRadius.input),
+      ),
     );
   }
 }
