@@ -3,9 +3,23 @@ import "index.dart";
 
 abstract final class WsyAppTheme {
   static InputDecorationTheme get _inputDecorationTheme {
-    return InputDecorationTheme(
-      border: OutlineInputBorder(
+    OutlineInputBorder border(
+      Color color, [
+      double width = WsyAppSpacing.xxxs,
+    ]) {
+      return OutlineInputBorder(
         borderRadius: BorderRadius.circular(WsyAppRadius.input),
+        borderSide: BorderSide(color: color, width: width),
+      );
+    }
+
+    return InputDecorationTheme(
+      enabledBorder: border(WsyAppColors.border),
+      focusedBorder: border(WsyAppColors.primary, WsyAppSpacing.xxs),
+      errorBorder: border(WsyAppColors.error),
+      focusedErrorBorder: border(WsyAppColors.error, WsyAppSpacing.xxs),
+      errorStyle: WsyAppTextStyles.lightTextTheme.bodySmall?.copyWith(
+        color: WsyAppColors.error,
       ),
     );
   }

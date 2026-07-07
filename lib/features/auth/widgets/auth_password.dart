@@ -8,6 +8,7 @@ class AuthPassword extends StatefulWidget {
     this.textInputAction,
     this.validator,
     this.autofillHints,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
   });
 
   final String label;
@@ -15,6 +16,7 @@ class AuthPassword extends StatefulWidget {
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
   final Iterable<String>? autofillHints;
+  final AutovalidateMode autovalidateMode;
 
   @override
   State<AuthPassword> createState() => _AuthPasswordState();
@@ -28,6 +30,7 @@ class _AuthPasswordState extends State<AuthPassword> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      autovalidateMode: widget.autovalidateMode,
       obscureText: _obscure,
       textInputAction: widget.textInputAction,
       validator: widget.validator,

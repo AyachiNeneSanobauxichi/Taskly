@@ -1,4 +1,10 @@
 abstract final class WsyAppSpacing {
+  /// 无间距 0
+  static const double none = 0;
+
+  /// 微小值 1
+  static const double xxxs = 1;
+
   /// 极小值 2
   static const double xxs = 2;
 

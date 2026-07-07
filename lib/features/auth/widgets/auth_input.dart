@@ -10,6 +10,7 @@ class AuthInput extends StatelessWidget {
     this.textInputAction,
     this.validator,
     this.autofillHints,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
   });
 
   final String label;
@@ -19,6 +20,7 @@ class AuthInput extends StatelessWidget {
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
   final Iterable<String>? autofillHints;
+  final AutovalidateMode autovalidateMode;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class AuthInput extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
+      autovalidateMode: autovalidateMode,
       validator: validator,
       autofillHints: autofillHints,
       decoration: InputDecoration(labelText: label, prefixIcon: Icon(icon)),
