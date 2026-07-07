@@ -2,6 +2,28 @@ import "package:flutter/material.dart";
 import "index.dart";
 
 abstract final class WsyAppTheme {
+  static InputDecorationTheme get _inputDecorationTheme {
+    return InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(WsyAppRadius.input),
+      ),
+    );
+  }
+
+  static FilledButtonThemeData get _filledButtonTheme {
+    return FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        minimumSize: const Size.fromHeight(WsyAppSpacing.xxxl), // 高度统一，宽度不强制
+        textStyle: WsyAppTextStyles.lightTextTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(WsyAppRadius.button),
+        ),
+      ),
+    );
+  }
+
   static ThemeData get light {
     const wsyColorScheme = ColorScheme.light(
       primary: WsyAppColors.primary,
@@ -17,7 +39,8 @@ abstract final class WsyAppTheme {
       colorScheme: wsyColorScheme,
       scaffoldBackgroundColor: WsyAppColors.background,
       textTheme: WsyAppTextStyles.lightTextTheme,
-      inputDecorationTheme: _inputDecorationTheme(),
+      inputDecorationTheme: _inputDecorationTheme,
+      filledButtonTheme: _filledButtonTheme,
       dividerTheme: const DividerThemeData(
         color: WsyAppColors.border,
         thickness: 1,
@@ -41,21 +64,13 @@ abstract final class WsyAppTheme {
       colorScheme: wsyColorScheme,
       scaffoldBackgroundColor: WsyAppColors.darkBackground,
       textTheme: WsyAppTextStyles.darkTextTheme,
-      inputDecorationTheme: _inputDecorationTheme(),
-      // filledButtonTheme: _filledButtonTheme,
+      inputDecorationTheme: _inputDecorationTheme,
+      filledButtonTheme: _filledButtonTheme,
       dividerTheme: const DividerThemeData(
         color: WsyAppColors.darkSurface,
         thickness: 1,
       ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
-    );
-  }
-
-  static InputDecorationTheme _inputDecorationTheme() {
-    return InputDecorationTheme(
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(WsyAppRadius.input),
-      ),
     );
   }
 }
