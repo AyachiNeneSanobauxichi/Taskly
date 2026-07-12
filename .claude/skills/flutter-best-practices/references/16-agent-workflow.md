@@ -1,0 +1,77 @@
+# 16 · Agent 文档驱动工作流
+
+> 本仓库用 `agent/` 目录下的 Markdown 文档驱动代码生成。本模块规定：文档如何组织、生成代码时的**业务 / infra 边界**、无接口时的 **mock 生命周期**、以及不确定处的 **TODO 标记**。这些是 agent 生成代码时的硬约束。
+
+## 📁 文档组织：`_page` 与 `_api` 分离
+
+业务模块（`agent/<feature>/...`）的文档**必须按职责拆分**：
+
+- **`<feature>_page.md`** —— 只写**页面 UI 与交互逻辑**（布局、组件、状态流转、表单校验、导航意图）。不写接口契约。
+- **`<feature>_api.md`** —— 只写**接口与数据契约**（端点、请求/响应字段、DTO、错误码、缓存策略）。不写 UI。
+
+infra 文档（`agent/infra/...`，如 `route.md`）**只写 infra**，不掺业务页面细节。
+
+> 一个文档一个职责：page 找 UI、api 找数据、infra 找基建。混写会让后续 agent 越界改动。
+
+## 🚧 生成边界：业务归业务，infra 不许碰
+
+按**业务模块文档**（`*_page.md` / `*_api.md`）生成的代码，**只允许写业务层**——即 feature 内部：
+
+```
+lib/features/<feature>/{data,domain,controllers,screens,widgets}/
+```
+
+**禁止改动 infra**，包括但不限于：
+
+- `lib/core/**`（network / DioClient / storage / error / config / providers …）
+- `lib/app/**`（`router/`、路由表、`app.dart` 入口装配）
+- `lib/theme/**`、全局 `lib/widgets/**` 共享组件的既有 API
+- `pubspec.yaml`、`l10n.yaml`、`analysis_options.yaml` 等工程配置
+
+如果实现业务**确实**需要动 infra（例如缺一条路由、缺一个 provider、缺 i18n 基建），**不要擅自改**——**停下来重点询问用户，由人工操作**，并说明：需要动什么、为什么、影响面。
+
+对应地，`agent/infra/*` 文档驱动的生成**只写 infra**，不写业务页面。
+
+## 🧪 Mock 生命周期：无真实接口时
+
+调用接口时若**尚无真实后端**：
+
+1. 在**该 feature 的 data 同目录**下新建 `mock/` 文件夹，放 mock 数据与假数据源（如 `mock/<feature>_mock.dart`）。
+2. 业务代码通过 mock 数据跑通 UI/逻辑；mock 只是临时占位。
+3. **接入真实接口后，立即删除**不再需要的 `mock/` 文件夹与数据，切回真实 DataSource。
+
+```
+lib/features/<feature>/data/
+  ├─ mock/                 # 无真实接口时临时存在，接完即删
+  │   └─ <feature>_mock.dart
+  ├─ <feature>_remote_data_source.dart
+  └─ <feature>_repository.dart
+```
+
+> mock 文件夹是**临时资产**，不得长期留存。接真数据的 PR 里必须一并清掉。
+
+## 📝 TODO 标记：不确定就留痕
+
+任何**拿不准 / 待确认 / 临时方案**的地方，必须加带描述的 `TODO`，方便后续检索：
+
+```dart
+// TODO(auth): 后端未定登录返回结构，先按 {token, user} 假设，接口定了要改
+// TODO(i18n): 文案待抽到 ARB，等 l10n 基建就绪
+```
+
+- 写清**为什么不确定 / 待办什么**，不要只写空 `// TODO`。
+- 建议带模块前缀 `TODO(<scope>):`，便于全局搜索归类。
+
+## 🌐 页面文案禁止硬编码（i18n）
+
+页面（`screens/` `widgets/`）里**用户可见文案一律走国际化**，禁止出现中/英文字面量。详见 `11-i18n-localization.md`。
+
+> ⚠️ i18n 属于 infra：若 gen-l10n 基建（`l10n.yaml` + `lib/l10n/*.arb` + `AppLocalizations`）尚未就绪，业务 agent **不得自行搭建**，按上面「生成边界」停下询问，由人工先建基建。
+
+## ✅ 自检清单（agent 生成后）
+
+- [ ] 只改了 feature 业务层，没碰 `core/` `app/` `theme/` 与工程配置。
+- [ ] 页面无硬编码文案（或已用 TODO 标出待抽取，且 i18n 基建缺失已上报）。
+- [ ] 无真实接口的部分放在 `data/mock/`，并已在文档/PR 说明「接完即删」。
+- [ ] 所有不确定处都有带描述的 `TODO(<scope>):`。
+- [ ] 需要动 infra 的点已单独列出、显式询问，而非擅自修改。

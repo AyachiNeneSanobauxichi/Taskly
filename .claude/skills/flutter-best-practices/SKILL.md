@@ -21,6 +21,8 @@ description: >-
 6. 提交前 `dart format` + `flutter analyze`（零告警）+ `flutter test`。禁止 `print`（用 `AppLogger`）。
 7. **关键函数/复杂逻辑必须写注释**（讲意图/为什么）；UI 代码注释保持简洁。
 8. **禁止魔法值**：尺寸/圆角用 `WsyAppSpacing`/`WsyAppRadius`，颜色用 `colorScheme`/`WsyAppColors`，文字用 `textTheme`/`WsyAppTextStyles`；禁止内联 `TextStyle(fontSize: ...)`、`Color(0xFF...)`、裸数值尺寸。
+9. **页面文案禁止硬编码**：用户可见文案一律走国际化（gen-l10n `AppLocalizations`/ARB），`screens/`·`widgets/` 内不得出现中/英文字面量。
+10. **agent 生成边界**：依业务文档（`*_page.md`/`*_api.md`）生成的代码**只写业务层**，**禁止改动 infra**（`core/`、`app/router`、`theme/`、`DioClient`、工程配置等）；确有必要必须停下重点询问、由人工操作。`agent/infra/*` 文档只写 infra。详见 `references/16-agent-workflow.md`。
 
 ## 🔧 常用命令
 
@@ -53,6 +55,7 @@ flutter test
 | 测试 | `references/13-testing.md` |
 | 性能 | `references/14-performance.md` |
 | Git 与质量门禁 | `references/15-git-and-quality.md` |
+| Agent 文档驱动工作流（业务/infra 边界、mock、TODO、_page/_api） | `references/16-agent-workflow.md` |
 
 ## ✅ 工作流约定
 

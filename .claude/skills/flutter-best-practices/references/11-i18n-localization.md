@@ -1,6 +1,8 @@
 # 11 · 国际化与本地化（intl）
 
 > 使用 `intl` 处理文案、日期、数字、复数。面向未来多语言，**不要把用户可见文案硬编码**在 Widget 里。
+>
+> 🚦 **红线**：页面（`screens/`·`widgets/`）里用户可见文案**禁止**出现中/英文字面量，一律走国际化。i18n 基建（`l10n.yaml` + `lib/l10n/*.arb` + `AppLocalizations`）属于 infra，业务 agent 不得自行搭建；缺失时按 `16-agent-workflow.md` 停下询问，由人工先建基建。
 
 ## ✅ 应该
 
