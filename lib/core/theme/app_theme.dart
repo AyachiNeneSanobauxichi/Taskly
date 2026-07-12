@@ -49,7 +49,10 @@ abstract final class WsyAppTheme {
       textTheme: textTheme,
       inputDecorationTheme: _inputDecorationTheme(scheme, textTheme),
       filledButtonTheme: _filledButtonTheme(textTheme),
-      dividerTheme: DividerThemeData(color: scheme.outlineVariant, thickness: 1),
+      dividerTheme: DividerThemeData(
+        color: scheme.outlineVariant,
+        thickness: 1,
+      ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
     );
   }

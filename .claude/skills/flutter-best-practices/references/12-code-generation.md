@@ -1,6 +1,6 @@
 # 12 · 代码生成（build_runner / gen-l10n）
 
-> Freezed / json_serializable / Riverpod 均依赖 `build_runner`；国际化依赖 `gen-l10n`。生成文件（`*.g.dart` / `*.freezed.dart` / `app_localizations*.dart`）**不手改、不入 review 关注点，但需入库**（保证 CI/他人可编译）。
+> Freezed / json_serializable 依赖 `build_runner`；国际化依赖 `gen-l10n`。⚠️ Riverpod **不参与**代码生成——本仓库 provider/notifier 一律手写（工具链无法运行 `riverpod_generator`，见 `04-state-management.md` 与 `agent/study/riverpod-codegen-issue.md`）。生成文件（`*.g.dart` / `*.freezed.dart` / `app_localizations*.dart`）**不手改、不入 review 关注点，但需入库**（保证 CI/他人可编译）。
 
 ## 🚦 新增「需命令生成」的工具包 → 必须写进 README
 
@@ -15,7 +15,7 @@
 
 - 新增/修改带 `@freezed` 的类。
 - 新增/修改带 `@JsonSerializable` / `fromJson` 的类。
-- 新增/修改带 `@riverpod` 的 provider/notifier。
+- （provider/notifier 手写，改动**无需**重新生成。）
 
 ## 常用命令
 
@@ -40,7 +40,7 @@ flutter gen-l10n
 - 每个使用注解的文件顶部声明对应 `part`：
   - Freezed：`part "xxx.freezed.dart";`
   - JSON：`part "xxx.g.dart";`
-  - Riverpod：`part "xxx.g.dart";`
+  - （Riverpod 手写，无 `part` / 无 `.g.dart`。）
 - 改完注解**立即** `build_runner build` 再继续，避免编译报错误导。
 - 生成产物**提交入库**（CI 环境可直接编译，减少构建时长与不确定性）。
 - 遇到冲突/幽灵错误：`build_runner clean` 后重跑。

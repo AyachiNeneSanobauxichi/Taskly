@@ -14,7 +14,7 @@ description: >-
 ## 🚦 首要红线（务必遵守）
 
 1. 字符串用**双引号** `"..."`（`prefer_double_quotes: true`）。
-2. 状态管理只用 **Riverpod 3 `@riverpod` 代码生成**；模型只用 **Freezed 3**；改注解后必须跑 `build_runner`。
+2. 状态管理用 **Riverpod 3**（`flutter_riverpod`）。⚠️ 当前 Flutter SDK 工具链无法运行 `riverpod_generator`，**provider/notifier 一律手写**（`Provider`/`NotifierProvider`/`AsyncNotifierProvider` 等），**不用 `@riverpod` 注解与代码生成**；模型仍用 **Freezed 3** + `build_runner`。原因与等价写法见 `agent/study/riverpod-codegen-issue.md`。
 3. 严格 **feature-first + 分层**：`data / domain / controllers / screens / widgets`，依赖单向向下（domain 不依赖 data）。
 4. 网络只通过 `core/network/DioClient`；错误统一 `AppException → Failure → AsyncValue`。
 5. 每个目录维护 `index.dart` barrel；对外只经 barrel 引用。
@@ -28,7 +28,7 @@ description: >-
 
 ```bash
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs   # 改了 freezed/json/riverpod 注解后
+dart run build_runner build --delete-conflicting-outputs   # 改了 freezed/json 注解后（provider 手写，无需生成）
 dart run build_runner watch  --delete-conflicting-outputs   # 开发期自动生成
 dart format .
 flutter analyze

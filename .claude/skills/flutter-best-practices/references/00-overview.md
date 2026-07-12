@@ -4,7 +4,7 @@
 
 | 领域 | 库 | 版本 | 说明 |
 | --- | --- | --- | --- |
-| 状态管理 | `flutter_riverpod` + `riverpod_annotation` | 3.3.x / 4.0.x | **代码生成** 写法为主 |
+| 状态管理 | `flutter_riverpod` | 3.3.x | **手写 Provider**（工具链不支持 codegen，见 04） |
 | 网络 | `dio` + `pretty_dio_logger` + `connectivity_plus` | 5.10.x | 统一 `DioClient` |
 | 数据模型 | `freezed` + `json_serializable` + `*_annotation` | 3.2.x / 6.11.x | 不可变模型 + JSON |
 | 路由 | `go_router` | 17.3.x | 声明式路由 |
@@ -13,7 +13,7 @@
 | 国际化 | `intl` | 0.20.x | 日期/数字/文案 |
 | 图片 | `cached_network_image` | 3.4.x | 网络图缓存 |
 | Lint | `flutter_lints` | 6.0.x | 基线规则 |
-| 代码生成 | `build_runner` | 2.15.x | freezed/json/riverpod |
+| 代码生成 | `build_runner` | 2.15.x | freezed/json（**不含 riverpod**） |
 
 > Dart SDK: `^3.10.1`。使用现代语法（records、patterns、sealed class、switch 表达式）。
 
@@ -23,7 +23,7 @@
 2. **不可变优先**：模型用 Freezed；状态用不可变对象，通过 `copyWith` 更新。
 3. **单向数据流**：UI → Controller(Notifier) → Repository → DataSource；反向只通过状态回流。
 4. **显式错误处理**：网络/数据层抛 `AppException`，向上转换为 `Failure`；UI 层用 `AsyncValue` 渲染。
-5. **代码生成而非手写样板**：Riverpod / Freezed / JSON 一律用注解 + `build_runner`。
+5. **模型代码生成**：Freezed / JSON 用注解 + `build_runner`；⚠️ Riverpod provider 因当前工具链无法运行 `riverpod_generator` 而**手写**（见 `04-state-management.md` 与 `agent/study/riverpod-codegen-issue.md`）。
 6. **Barrel 导出**：每个目录维护 `index.dart`，对外只暴露 barrel。
 7. **零 Lint 警告**：提交前 `flutter analyze` 必须干净。
 8. **不在 UI 写业务逻辑**：Widget 只负责渲染与交互转发。
@@ -61,9 +61,9 @@ textStyle: Theme.of(context).textTheme.labelLarge,
 
 | 场景 | 用什么 |
 | --- | --- |
-| 需要一个可变的、带异步加载的状态 | `@riverpod class Xxx extends _$Xxx`（AsyncNotifier） |
-| 只读派生值 | `@riverpod Xxx foo(Ref ref)`（函数式 provider） |
-| 一次性依赖（如 Repository） | `@riverpod Xxx xxxRepository(Ref ref)` |
+| 需要一个可变的、带异步加载的状态 | 手写 `AsyncNotifierProvider` + `class Xxx extends AsyncNotifier<T>` |
+| 只读派生值 | 手写 `final xxxProvider = Provider<T>((ref) {...})` |
+| 一次性依赖（如 Repository） | 手写 `final xxxRepositoryProvider = Provider<Xxx>((ref) => ...)` |
 | 定义数据结构 | Freezed `abstract class` |
 | 定义多态/状态机 | Freezed `sealed class` union |
 | 页面跳转 | `context.goNamed` / `context.pushNamed` + `RouteName` 常量 |

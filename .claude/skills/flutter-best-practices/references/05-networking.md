@@ -46,9 +46,8 @@ class DioClient {
 ## 📌 Dio 装配（provider）
 
 ```dart
-// lib/core/providers/core_providers.dart
-@riverpod
-Dio dio(Ref ref) {
+// lib/core/providers/core_providers.dart（手写 provider，非 @riverpod）
+final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
     baseUrl: Env.apiBaseUrl,
     connectTimeout: const Duration(seconds: 15),
@@ -56,16 +55,17 @@ Dio dio(Ref ref) {
     headers: const {"Content-Type": "application/json"},
   ));
   dio.interceptors.addAll([
-    AuthInterceptor(ref),
+    AuthInterceptor(ref.watch(secureStorageProvider)),
+    ResponseInterceptor(),
     ErrorInterceptor(),
     if (kDebugMode) PrettyDioLogger(requestBody: true, responseBody: true),
   ]);
   ref.onDispose(dio.close);
   return dio;
-}
+});
 
-@riverpod
-DioClient dioClient(Ref ref) => DioClient(ref.watch(dioProvider));
+final dioClientProvider =
+    Provider<DioClient>((ref) => DioClient(ref.watch(dioProvider)));
 ```
 
 ## 📌 ErrorInterceptor（转换为领域异常）

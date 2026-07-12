@@ -62,18 +62,22 @@ class TodoRepositoryImpl implements TodoRepository {
 **provider 绑定（依赖注入）：**
 
 ```dart
-// lib/features/todo/data/todo_providers.dart
-@riverpod
-TodoRepository todoRepository(Ref ref) =>
-    TodoRepositoryImpl(ref.watch(dioClientProvider));
+// lib/features/todo/data/todo_providers.dart（手写 provider）
+final todoRepositoryProvider = Provider<TodoRepository>(
+  (ref) => TodoRepositoryImpl(ref.watch(dioClientProvider)),
+);
 ```
 
 **controller 编排：**
 
 ```dart
-// lib/features/todo/controllers/todo_list_controller.dart
-@riverpod
-class TodoListController extends _$TodoListController {
+// lib/features/todo/controllers/todo_list_controller.dart（手写 provider）
+final todoListControllerProvider =
+    AsyncNotifierProvider<TodoListController, List<Todo>>(
+  TodoListController.new,
+);
+
+class TodoListController extends AsyncNotifier<List<Todo>> {
   @override
   Future<List<Todo>> build() => ref.watch(todoRepositoryProvider).fetchTodos();
 

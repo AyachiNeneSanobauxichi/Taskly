@@ -9,8 +9,9 @@
 | 领域 | 技术 | 版本 | 说明 |
 | --- | --- | --- | --- |
 | 框架 | Flutter / Dart | Dart `^3.10.1` | 现代语法（records / patterns / sealed / switch 表达式） |
-| 状态管理 | `flutter_riverpod` + `riverpod_annotation` | 3.3.x / 4.0.x | 代码生成写法（`@riverpod`） |
+| 状态管理 | `flutter_riverpod` | 3.3.x | **手写 Provider**（工具链不支持 `riverpod_generator`，见 `agent/study/riverpod-codegen-issue.md`） |
 | 网络 | `dio` + `pretty_dio_logger` + `connectivity_plus` | 5.10.x | 统一 `DioClient` + 拦截器 + 断网检测 |
+| 安全存储 | `flutter_secure_storage` | 9.2.x | token 等敏感数据（Keychain/Keystore） |
 | 数据模型 | `freezed` + `json_serializable` + `*_annotation` | 3.2.x / 6.11.x | 不可变模型 + JSON 序列化 |
 | 表单校验 | `form_builder_validators` | 11.3.x | 复用校验规则（邮箱/必填/长度等） |
 | 路由 | `go_router` | 17.3.x | 声明式路由 + 鉴权守卫 |
@@ -18,7 +19,7 @@
 | 日志 | `logger` | 2.7.x | 统一 `AppLogger` |
 | 国际化 | `flutter_localizations` + `intl`（gen-l10n） | SDK / 0.20.x | 中英双语、随系统切换；`AppLocalizations` 由 `lib/l10n/*.arb` 生成 |
 | 图片 | `cached_network_image` | 3.4.x | 网络图缓存 |
-| 代码生成 | `build_runner` | 2.15.x | freezed / json / riverpod |
+| 代码生成 | `build_runner` | 2.15.x | freezed / json（**不含 riverpod**，provider 手写） |
 | 静态检查 | `flutter_lints` | 6.0.x | 基线 lint 规则 |
 
 ## 项目结构
@@ -68,9 +69,9 @@ ENABLE_LOGGING=true
 
 > `.env` / `.env.*` 已在 `.gitignore` 中忽略（保留 `.env.example`），请勿提交真实密钥。
 
-### 3. 生成代码（Freezed / JSON / Riverpod）
+### 3. 生成代码（Freezed / JSON）
 
-首次运行或修改了带注解（`@freezed` / `@JsonSerializable` / `@riverpod`）的文件后执行：
+首次运行或修改了带注解（`@freezed` / `@JsonSerializable`）的文件后执行（⚠️ Riverpod provider 手写，无需生成；原因见 `agent/study/riverpod-codegen-issue.md`）：
 
 ```bash
 dart run build_runner build --delete-conflicting-outputs

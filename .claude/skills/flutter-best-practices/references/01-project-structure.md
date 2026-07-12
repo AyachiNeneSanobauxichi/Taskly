@@ -68,5 +68,5 @@ screens/widgets  →  controllers  →  domain(repository 抽象)  ←  data(实
 2. 每个子目录建 `index.dart`，feature 根建 `index.dart` 汇总导出。
 3. `domain` 定义 Entity（Freezed）与 `XxxRepository` 抽象。
 4. `data` 定义 DTO、DataSource、`XxxRepositoryImpl`，用 `DioClient`。
-5. `controllers` 用 `@riverpod` Notifier 暴露状态。
+5. `controllers` 用**手写** `NotifierProvider`/`AsyncNotifierProvider` + `Notifier`/`AsyncNotifier` 暴露状态（不用 `@riverpod`）。
 6. `screens` 建页面并在 `app/router/routes.dart` 注册。

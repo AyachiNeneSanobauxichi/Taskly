@@ -64,9 +64,8 @@ final List<RouteBase> appRoutes = [
 ## 📌 GoRouter provider + 鉴权 redirect
 
 ```dart
-// lib/app/router/app_router.dart
-@riverpod
-GoRouter appRouter(Ref ref) {
+// lib/app/router/app_router.dart（手写 provider）
+final appRouterProvider = Provider<GoRouter>((ref) {
   final auth = ref.watch(authControllerProvider);
   return GoRouter(
     initialLocation: RoutePath.todos,
@@ -74,7 +73,7 @@ GoRouter appRouter(Ref ref) {
     redirect: (context, state) => guardRedirect(auth, state),
     errorBuilder: (context, state) => const NotFoundScreen(),
   );
-}
+});
 ```
 
 ```dart
