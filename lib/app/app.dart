@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:form_builder_validators/form_builder_validators.dart";
+import "package:todo_app_v1/core/theme/index.dart";
 import "package:todo_app_v1/features/auth/index.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
-import "package:todo_app_v1/theme/index.dart";
 
 class WsyApp extends StatelessWidget {
   const WsyApp({super.key});

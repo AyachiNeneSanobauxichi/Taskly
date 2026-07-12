@@ -16,7 +16,7 @@
 | 路由 | `go_router` | 17.3.x | 声明式路由 + 鉴权守卫 |
 | 配置 | `flutter_dotenv` | 6.0.x | `.env` 环境变量 |
 | 日志 | `logger` | 2.7.x | 统一 `AppLogger` |
-| 国际化 | `intl` | 0.20.x | 日期 / 数字 / 复数 |
+| 国际化 | `flutter_localizations` + `intl`（gen-l10n） | SDK / 0.20.x | 中英双语、随系统切换；`AppLocalizations` 由 `lib/l10n/*.arb` 生成 |
 | 图片 | `cached_network_image` | 3.4.x | 网络图缓存 |
 | 代码生成 | `build_runner` | 2.15.x | freezed / json / riverpod |
 | 静态检查 | `flutter_lints` | 6.0.x | 基线 lint 规则 |
@@ -27,11 +27,10 @@
 lib/
 ├── main.dart          # 入口（加载 .env、ProviderScope、runApp）
 ├── app/               # 应用装配（MaterialApp、router）
-├── core/              # 跨功能基础设施（network / error / storage / config / utils）
+├── core/              # 跨功能基础设施（network / error / storage / config / theme）
 ├── features/          # 业务功能（feature-first：data/domain/controllers/screens/widgets）
-├── shared/            # 可复用的业务无关组件/模型
-├── theme/             # 主题与配色
-└── widgets/           # 全局通用 UI 组件
+├── l10n/              # 国际化：*.arb 文案源 + 生成的 AppLocalizations
+└── shared/            # 业务无关可复用（widgets / utils）
 ```
 
 ## 环境要求
@@ -83,7 +82,17 @@ dart run build_runner build --delete-conflicting-outputs
 dart run build_runner watch --delete-conflicting-outputs
 ```
 
-### 4. 运行应用
+### 4. 生成国际化（i18n）
+
+用户文案维护在 `lib/l10n/app_en.arb`（模板）与 `lib/l10n/app_zh.arb`，由 gen-l10n 生成 `AppLocalizations`。因 `pubspec.yaml` 配了 `flutter: generate: true`，`flutter run` / `flutter build` 会**自动生成**；改了 `.arb` 想立即拿到新文案可手动执行：
+
+```bash
+flutter gen-l10n
+```
+
+> 加新文案：先在 `app_en.arb` 加 `key` + `@key`（description），再在 `app_zh.arb` 加对应中文（两个文件 key 必须一一对应），然后重新生成。
+
+### 5. 运行应用
 
 ```bash
 flutter run                 # 运行到默认设备
@@ -105,7 +114,7 @@ flutter build ios    # 构建 iOS 包
 
 同一套规范以两种 AI 原生格式维护（内容等价）：
 
-- **Claude — skill**：[`.claude/skills/flutter-best-practices/`](./.claude/skills/flutter-best-practices/SKILL.md)（`SKILL.md` + `references/00..15`，按需加载）
+- **Claude — skill**：[`.claude/skills/flutter-best-practices/`](./.claude/skills/flutter-best-practices/SKILL.md)（`SKILL.md` + `references/00..16`，按需加载）
 - **Claude 入口**：[`.claude/CLAUDE.md`](./.claude/CLAUDE.md)（自动加载的红线，指向上述 skill）
 - **Claude 团队配置**：[`.claude/settings.json`](./.claude/settings.json)（共享命令权限白名单；个人覆盖写 `.claude/settings.local.json`）
 - **Cursor — rules**：`.cursor/rules/*.mdc`（每条规则自包含，按 `globs` 自动生效）

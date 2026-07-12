@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:todo_app_v1/theme/index.dart";
+import "package:todo_app_v1/core/theme/index.dart";
 
 class WsyCheckbox extends StatelessWidget {
   const WsyCheckbox({

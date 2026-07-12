@@ -1,12 +1,21 @@
 ---
-description: build_runner 代码生成规范（Freezed/JSON/Riverpod）
-globs: lib/**/*.g.dart,lib/**/*.freezed.dart
+description: build_runner / gen-l10n 代码生成规范（Freezed/JSON/Riverpod/i18n）
+globs: lib/**/*.g.dart,lib/**/*.freezed.dart,lib/l10n/**/*,l10n.yaml,pubspec.yaml,README.md
 alwaysApply: false
 ---
 
-# 12 · 代码生成（build_runner）
+# 12 · 代码生成（build_runner / gen-l10n）
 
-> Freezed / json_serializable / Riverpod 均依赖 `build_runner`。生成文件（`*.g.dart` / `*.freezed.dart`）**不手改、不入 review 关注点，但需入库**（保证 CI/他人可编译）。
+> Freezed / json_serializable / Riverpod 均依赖 `build_runner`；国际化依赖 `gen-l10n`。生成文件（`*.g.dart` / `*.freezed.dart` / `app_localizations*.dart`）**不手改、不入 review 关注点，但需入库**（保证 CI/他人可编译）。
+
+## 🚦 新增「需命令生成」的工具包 → 必须写进 README
+
+引入任何**装了还不能直接用、要额外跑命令才产出可用代码/资源**的包（`build_runner` 系、`intl` 的 gen-l10n、未来的图标/资源生成器等），**必须**同步在项目 `README.md` 补齐开发者步骤：
+
+- 判断标准：该包会产出 `*.g.dart` / `*.freezed.dart` / `AppLocalizations` 等**中间产物**，`flutter pub get` 之后仍需再跑命令。
+- README 至少写清：**装依赖 → 生成命令（含常用 flag）→ 触发时机**（改了哪些注解/文件要重跑）→ 产物位置与是否入库。
+- 目标：新人 `clone` 后照 README 一步步能跑通、能编译。
+- 命令有变动：本规则与 README **两处同步**更新。
 
 ## 何时需要重新生成
 
@@ -25,7 +34,12 @@ dart run build_runner watch --delete-conflicting-outputs
 
 # 清理生成缓存
 dart run build_runner clean
+
+# 国际化：根据 lib/l10n/*.arb 生成 AppLocalizations（改了 arb 后重跑）
+flutter gen-l10n
 ```
+
+> `pubspec.yaml` 里 `flutter: generate: true` 时，`flutter run`/`flutter build` 会自动跑一次 gen-l10n；改完 arb 想立即拿到新 `AppLocalizations` 可手动 `flutter gen-l10n`。
 
 ## ✅ 应该
 

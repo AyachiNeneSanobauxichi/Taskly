@@ -21,7 +21,7 @@ lib/
 │   ├── network/              # DioClient / ApiResult / 拦截器
 │   ├── providers/            # 核心级 provider（dio、connectivity 等）
 │   ├── storage/              # 安全存储 / 本地缓存
-│   └── utils/                # logger 等工具
+│   └── theme/                # app_colors / app_spacing / app_text_styles / app_theme
 ├── features/                 # 业务功能（feature-first）
 │   └── <feature>/            # 例：auth、todo
 │       ├── data/             # DataSource + Repository 实现 + DTO
@@ -31,9 +31,10 @@ lib/
 │       ├── screens/          # 页面级 Widget（路由目标）
 │       ├── widgets/          # 该 feature 私有组件
 │       └── index.dart
-├── shared/                   # 可复用的业务无关组件/模型
-├── theme/                    # app_colors / app_theme
-└── widgets/                  # 全局通用 UI 组件
+├── l10n/                     # gen-l10n 产物（app_localizations*.dart，源自 lib/l10n/*.arb）
+└── shared/                   # 可复用的业务无关资产
+    ├── widgets/              # 全局通用 UI 组件（button / checkbox…）
+    └── utils/                # 业务无关工具（logger 等）
 ```
 
 ## ✅ 应该
