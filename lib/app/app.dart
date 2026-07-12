@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:form_builder_validators/form_builder_validators.dart";
+import "package:todo_app_v1/app/router/index.dart";
 import "package:todo_app_v1/core/theme/index.dart";
-import "package:todo_app_v1/features/auth/index.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
 
 class WsyApp extends StatelessWidget {
@@ -9,7 +9,7 @@ class WsyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       // 标题走本地化（随 locale 切换）
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: WsyAppTheme.light, // 亮色主题
@@ -23,7 +23,7 @@ class WsyApp extends StatelessWidget {
         FormBuilderLocalizations.delegate, // 表单校验库的错误文案本地化
       ],
       debugShowCheckedModeBanner: true,
-      home: const LoginScreen(),
+      routerConfig: appRouter, // go_router 装配
     );
   }
 }

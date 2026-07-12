@@ -82,4 +82,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get registerGoLogin => '去登录';
+
+  @override
+  String get homeTitle => '首页（占位）';
+
+  @override
+  String get homeBackToLogin => '返回登录';
+
+  @override
+  String get routeNotFound => '页面不存在';
 }

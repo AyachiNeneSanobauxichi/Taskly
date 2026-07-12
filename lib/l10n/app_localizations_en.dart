@@ -83,4 +83,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get registerGoLogin => 'Log in';
+
+  @override
+  String get homeTitle => 'Home (placeholder)';
+
+  @override
+  String get homeBackToLogin => 'Back to login';
+
+  @override
+  String get routeNotFound => 'Page not found';
 }

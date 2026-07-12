@@ -247,6 +247,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log in'**
   String get registerGoLogin;
+
+  /// Placeholder text shown on the home screen in v1 routing
+  ///
+  /// In en, this message translates to:
+  /// **'Home (placeholder)'**
+  String get homeTitle;
+
+  /// Test button on the home screen that returns to the login screen
+  ///
+  /// In en, this message translates to:
+  /// **'Back to login'**
+  String get homeBackToLogin;
+
+  /// Message shown by the router error page for an unknown route
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get routeNotFound;
 }
 
 class _AppLocalizationsDelegate

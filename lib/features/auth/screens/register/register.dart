@@ -1,5 +1,8 @@
+import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:form_builder_validators/form_builder_validators.dart";
+import "package:go_router/go_router.dart";
+import "package:todo_app_v1/app/router/index.dart";
 import "package:todo_app_v1/core/theme/index.dart";
 import "package:todo_app_v1/features/auth/index.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
@@ -23,6 +26,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   bool _isChecked = false;
 
+  // "去登录" 富文本链接的点击识别器（需随 State 释放）。
+  late final TapGestureRecognizer _goLoginTap;
+
+  @override
+  void initState() {
+    super.initState();
+    _goLoginTap = TapGestureRecognizer()
+      ..onTap = () => context.goNamed(RouteName.login);
+  }
+
   void _onRegister() {
     final formValid = _formKey.currentState!.validate();
     if (!formValid) return; // 输入框有错，停止
@@ -42,6 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _goLoginTap.dispose();
     super.dispose();
   }
 
@@ -200,6 +214,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: theme.colorScheme.primary,
                             fontWeight: FontWeight.w600,
                           ),
+                          recognizer: _goLoginTap,
                         ),
                       ],
                     ),

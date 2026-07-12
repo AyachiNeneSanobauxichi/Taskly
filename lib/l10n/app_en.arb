@@ -103,5 +103,18 @@
   "registerGoLogin": "Log in",
   "@registerGoLogin": {
     "description": "Link that navigates to the login screen"
+  },
+
+  "homeTitle": "Home (placeholder)",
+  "@homeTitle": {
+    "description": "Placeholder text shown on the home screen in v1 routing"
+  },
+  "homeBackToLogin": "Back to login",
+  "@homeBackToLogin": {
+    "description": "Test button on the home screen that returns to the login screen"
+  },
+  "routeNotFound": "Page not found",
+  "@routeNotFound": {
+    "description": "Message shown by the router error page for an unknown route"
   }
 }

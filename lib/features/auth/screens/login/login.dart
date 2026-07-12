@@ -1,5 +1,8 @@
+import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:form_builder_validators/form_builder_validators.dart";
+import "package:go_router/go_router.dart";
+import "package:todo_app_v1/app/router/index.dart";
 import "package:todo_app_v1/core/theme/index.dart";
 import "package:todo_app_v1/features/auth/index.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
@@ -18,10 +21,22 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // "去注册" 富文本链接的点击识别器（需随 State 释放）。
+  late final TapGestureRecognizer _goRegisterTap;
+
+  @override
+  void initState() {
+    super.initState();
+    _goRegisterTap = TapGestureRecognizer()
+      ..onTap = () => context.goNamed(RouteName.register);
+  }
+
   void _onLogin() {
     final formValid = _formKey.currentState!.validate();
     if (!formValid) return; // 输入框有错，停止
-    // 全部通过 → 调用登录逻辑（v1 仅静态 UI，逻辑后续接入）
+    // v1 仅静态 UI，暂无登录逻辑；校验通过直接进首页。
+    // TODO(auth): 接入登录接口，成功后再跳转 home。
+    context.goNamed(RouteName.home);
   }
 
   @override
@@ -29,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _formKey.currentState?.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _goRegisterTap.dispose();
     super.dispose();
   }
 
@@ -147,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: theme.colorScheme.primary,
                             fontWeight: FontWeight.w600,
                           ),
+                          recognizer: _goRegisterTap,
                         ),
                       ],
                     ),

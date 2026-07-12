@@ -28,5 +28,9 @@
   "registerAgreementRequired": "请先阅读并同意用户协议",
   "registerSubmit": "注册",
   "registerHaveAccount": "已有账号？",
-  "registerGoLogin": "去登录"
+  "registerGoLogin": "去登录",
+
+  "homeTitle": "首页（占位）",
+  "homeBackToLogin": "返回登录",
+  "routeNotFound": "页面不存在"
 }
