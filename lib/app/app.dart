@@ -23,7 +23,7 @@ class WsyApp extends StatelessWidget {
         FormBuilderLocalizations.delegate, // 关键：库的中文错误文案
       ],
       debugShowCheckedModeBanner: true,
-      home: const RegisterScreen(),
+      home: const LoginScreen(),
     );
   }
 }
