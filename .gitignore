@@ -12,6 +12,14 @@
 .swiftpm/
 migrate_working_dir/
 
+# Environment (keep .env.example, ignore real env files with secrets)
+.env
+.env.*
+!.env.example
+
+# Claude Code local (personal) settings — keep shared .claude/settings.json tracked
+.claude/settings.local.json
+
 # IntelliJ related
 *.iml
 *.ipr
