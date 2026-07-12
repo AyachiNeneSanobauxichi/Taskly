@@ -4,9 +4,9 @@
 
 ## ✅ 应该
 
-- **颜色/间距/圆角** 集中定义（`AppColors` + `ThemeData`），Widget 通过 `Theme.of(context)` 取值，不散落魔法值。
-- **Material 3**：`ThemeData(useMaterial3: true, colorScheme: ...)`，支持 `light`/`dark`。
-- **文本样式** 用 `Theme.of(context).textTheme`，不硬编码 `TextStyle(fontSize: 14)` 到处写。
+- **颜色/间距/圆角/字体** 集中为全局令牌（`WsyAppColors` / `WsyAppSpacing` / `WsyAppRadius` / `WsyAppTextStyles`），Widget 通过 `Theme.of(context)` 取值，**不散落魔法值**（见下方红线）。
+- **Material 3**：`ThemeData(useMaterial3: true, colorScheme: ...)`，支持 `light`/`dark`；色板用 `ColorScheme.fromSeed` 生成完整角色。
+- **文本样式** 用 `Theme.of(context).textTheme`（令牌 `WsyAppTextStyles`），**禁止**内联 `TextStyle(fontSize: ...)`。
 - **组件拆分**：`build` 过长时拆成小 Widget（class 优先于返回 Widget 的方法，利于 const 与重建优化）。
 - **const 化**：静态子树尽量 `const`。
 - **列表** 用 `ListView.builder` / `SliverList` 懒加载；给 item 稳定 `key`。
@@ -21,6 +21,26 @@
 - ❌ 在 `build` 里创建 controller/大对象（应在 `initState`/provider）。
 - ❌ 用 `Column` + 大量子项代替可滚动懒加载列表。
 - ❌ 业务逻辑写进 Widget。
+
+## 🚫 红线：禁止魔法值（尺寸 / 字体 / 颜色）
+
+项目**不允许**魔法数字、内联字体、硬编码颜色，一律用全局令牌：
+
+- 尺寸 / 间距 / 圆角 → `WsyAppSpacing` / `WsyAppRadius`
+- 颜色 → `Theme.of(context).colorScheme`（组件层）/ `WsyAppColors`（仅 `app_theme` 组装用）
+- 文字 → `Theme.of(context).textTheme` / `WsyAppTextStyles`
+
+```dart
+// ❌ 禁止
+textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+padding: const EdgeInsets.all(16),
+color: const Color(0xFF7C3AED),
+
+// ✅ 用令牌
+textStyle: Theme.of(context).textTheme.labelLarge,
+padding: const EdgeInsets.all(WsyAppSpacing.md),
+color: Theme.of(context).colorScheme.primary,
+```
 
 ## 📌 颜色与主题
 

@@ -19,6 +19,8 @@ description: >-
 4. 网络只通过 `core/network/DioClient`；错误统一 `AppException → Failure → AsyncValue`。
 5. 每个目录维护 `index.dart` barrel；对外只经 barrel 引用。
 6. 提交前 `dart format` + `flutter analyze`（零告警）+ `flutter test`。禁止 `print`（用 `AppLogger`）。
+7. **关键函数/复杂逻辑必须写注释**（讲意图/为什么）；UI 代码注释保持简洁。
+8. **禁止魔法值**：尺寸/圆角用 `WsyAppSpacing`/`WsyAppRadius`，颜色用 `colorScheme`/`WsyAppColors`，文字用 `textTheme`/`WsyAppTextStyles`；禁止内联 `TextStyle(fontSize: ...)`、`Color(0xFF...)`、裸数值尺寸。
 
 ## 🔧 常用命令
 

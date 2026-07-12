@@ -36,6 +36,27 @@
 - **行宽**：遵循 `dart format` 默认（80 列），不要手动关闭格式化。
 - **禁止** `print()`，统一用 `AppLogger`（见 `10-storage-security.md` / utils）。
 
+### 注释规范
+
+- **关键函数 / 复杂逻辑必须写注释**：讲清「意图 / 为什么这么做」，而非复述代码字面；公共 API、非直观算法、边界处理与临时兜底都要注释。
+- **UI 代码注释保持简洁**：一句话点明这块 UI 的作用或某个不直观参数的原因即可（如 `// loading 时置空 onPressed：防重复提交`），不逐行解释布局。
+- 公共类 / 方法用 `///` 文档注释；局部原因用 `//` 行内注释。注释随代码同步更新，删代码要删对应注释，不留失效 / 误导注释。
+
+### 禁止魔法值（尺寸 / 字体 / 颜色）
+
+> 项目**不允许**魔法数字、内联字体、硬编码颜色，一律用全局令牌。
+
+- **尺寸 / 间距 / 圆角** → `WsyAppSpacing` / `WsyAppRadius`，不写裸数值（`16`、`12`…）。
+- **颜色** → `Theme.of(context).colorScheme`（组件层）或 `WsyAppColors`（仅供 `app_theme` 组装），禁止 `Color(0xFF...)` 散落各处。
+- **文字样式** → `Theme.of(context).textTheme` 或 `WsyAppTextStyles` 令牌，禁止内联 `TextStyle(fontSize: ..., fontWeight: ...)`。
+
+```dart
+// ❌ 禁止：魔法字号 + 内联字体
+textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+// ✅ 用全局文字令牌
+textStyle: Theme.of(context).textTheme.labelLarge,
+```
+
 ## 快速决策表
 
 | 场景 | 用什么 |

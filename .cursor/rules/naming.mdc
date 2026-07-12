@@ -39,7 +39,22 @@ alwaysApply: false
 | 领域实体 | 无后缀（纯名词） | `Todo`, `User` |
 | 控制器/状态机 | `Controller` 或 `Notifier` | `TodoListController` |
 | UI 状态类 | `State` | `LoginState` |
-| 通用组件 | 语义化名词 | `PrimaryButton`, `LoadingView` |
+| 全局通用组件 | `Wsy` 前缀 + 语义名词 | `WsyButton`, `WsyCheckbox` |
+
+## 项目专有约定（本仓库 · Wsy 体系）
+
+> 从现有代码反向沉淀的约定，新增代码须遵循。
+
+| 场景 | 约定 | 示例 |
+| --- | --- | --- |
+| 全局复用 UI 组件 | 类名加 `Wsy` 前缀；文件 `wsy_*.dart`；放 `lib/widgets/<组件类别>/` 子目录 | `WsyButton`（`widgets/button/wsy_button.dart`）、`WsyCheckbox`、`WsyCheckboxFormField` |
+| 全局主题令牌类 | `WsyApp<角色>` | `WsyAppColors`、`WsyAppTheme`、`WsyAppTextStyles`、`WsyAppSpacing`、`WsyAppRadius` |
+| feature 私有组件 | **不加** `Wsy`；语义 `UpperCamelCase`；文件 `snake_case.dart`；放该 feature 的 `widgets/` | `AuthInput`（`features/auth/widgets/auth_input.dart`）、`SocialIconButton` |
+| 布尔入参 | `is` 前缀 | `isLoading`、`isFullWidth`、`isError` |
+| 事件回调入参 | `on` 前缀 | `onPressed`、`onChanged`、`onTap` |
+
+- `Wsy` 前缀 = “**全局可复用**”的标志：只有下沉到 `lib/widgets/` 的通用组件才用；feature 内部组件不要用，避免误当作可跨 feature 复用。
+- 全局组件按“组件类别”建子目录（`widgets/button/`、`widgets/checkbox/`），并在 `widgets/index.dart` barrel 汇总导出。
 
 ## ✅ 应该
 

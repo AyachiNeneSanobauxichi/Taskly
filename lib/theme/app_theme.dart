@@ -1,8 +1,63 @@
 import "package:flutter/material.dart";
 import "index.dart";
 
+/// 应用主题：从品牌 seed 生成完整 M3 色板（浅色/深色各一套），
+/// 再把关键角色锁定为品牌值（点缀色、卡片底、文字色），
+/// 其余角色（container/outline/surfaceVariant 等）交给 fromSeed 自动协调，
+/// 保证两套模式都好看且对比度达标。
 abstract final class WsyAppTheme {
-  static InputDecorationTheme get _inputDecorationTheme {
+  static ThemeData get light => _build(
+    _scheme(Brightness.light),
+    WsyAppTextStyles.lightTextTheme,
+    WsyAppColors.background,
+  );
+
+  static ThemeData get dark => _build(
+    _scheme(Brightness.dark),
+    WsyAppTextStyles.darkTextTheme,
+    WsyAppColors.darkBackground,
+  );
+
+  /// 从 seed 生成整套色板，仅锁定品牌关键角色。
+  static ColorScheme _scheme(Brightness brightness) {
+    final base = ColorScheme.fromSeed(
+      seedColor: WsyAppColors.seed,
+      brightness: brightness,
+    );
+    final isLight = brightness == Brightness.light;
+    return base.copyWith(
+      // 品红点缀 → tertiary（与紫罗兰主色形成对比强调）
+      tertiary: WsyAppColors.accent,
+      onTertiary: Colors.white,
+      // 干净画布：纯白/抬升卡片底 + 高对比文字
+      surface: isLight ? WsyAppColors.surface : WsyAppColors.darkSurface,
+      onSurface: isLight
+          ? WsyAppColors.textPrimary
+          : WsyAppColors.darkTextPrimary,
+    );
+  }
+
+  static ThemeData _build(
+    ColorScheme scheme,
+    TextTheme textTheme,
+    Color scaffoldBackground,
+  ) {
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: scaffoldBackground,
+      textTheme: textTheme,
+      inputDecorationTheme: _inputDecorationTheme(scheme, textTheme),
+      filledButtonTheme: _filledButtonTheme(textTheme),
+      dividerTheme: DividerThemeData(color: scheme.outlineVariant, thickness: 1),
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+    );
+  }
+
+  static InputDecorationTheme _inputDecorationTheme(
+    ColorScheme scheme,
+    TextTheme textTheme,
+  ) {
     OutlineInputBorder border(
       Color color, [
       double width = WsyAppSpacing.xxxs,
@@ -14,77 +69,23 @@ abstract final class WsyAppTheme {
     }
 
     return InputDecorationTheme(
-      enabledBorder: border(WsyAppColors.border),
-      focusedBorder: border(WsyAppColors.primary, WsyAppSpacing.xxs),
-      errorBorder: border(WsyAppColors.error),
-      focusedErrorBorder: border(WsyAppColors.error, WsyAppSpacing.xxs),
-      errorStyle: WsyAppTextStyles.lightTextTheme.bodySmall?.copyWith(
-        color: WsyAppColors.error,
-      ),
+      enabledBorder: border(scheme.outline),
+      focusedBorder: border(scheme.primary, WsyAppSpacing.xxs),
+      errorBorder: border(scheme.error),
+      focusedErrorBorder: border(scheme.error, WsyAppSpacing.xxs),
+      errorStyle: textTheme.bodySmall?.copyWith(color: scheme.error),
     );
   }
 
-  static FilledButtonThemeData get _filledButtonTheme {
+  static FilledButtonThemeData _filledButtonTheme(TextTheme textTheme) {
     return FilledButtonThemeData(
       style: FilledButton.styleFrom(
         minimumSize: const Size.fromHeight(WsyAppSpacing.xxxl), // 高度统一，宽度不强制
-        textStyle: WsyAppTextStyles.lightTextTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
-        ),
+        textStyle: textTheme.labelLarge, // 用全局按钮字体令牌，不写死字号/字重
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(WsyAppRadius.button),
         ),
       ),
-    );
-  }
-
-  static ThemeData get light {
-    const wsyColorScheme = ColorScheme.light(
-      primary: WsyAppColors.primary,
-      secondary: WsyAppColors.secondary,
-      surface: WsyAppColors.surface,
-      error: WsyAppColors.error,
-      onPrimary: Colors.white, // 主色上面的文字/图标颜色（白字配蓝底）
-      onSurface: WsyAppColors.textPrimary,
-    );
-
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: wsyColorScheme,
-      scaffoldBackgroundColor: WsyAppColors.background,
-      textTheme: WsyAppTextStyles.lightTextTheme,
-      inputDecorationTheme: _inputDecorationTheme,
-      filledButtonTheme: _filledButtonTheme,
-      dividerTheme: const DividerThemeData(
-        color: WsyAppColors.border,
-        thickness: 1,
-      ),
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-    );
-  }
-
-  static ThemeData get dark {
-    const wsyColorScheme = ColorScheme.dark(
-      primary: WsyAppColors.primary,
-      secondary: WsyAppColors.secondary,
-      surface: WsyAppColors.darkSurface,
-      error: WsyAppColors.error,
-      onPrimary: Colors.white,
-      onSurface: WsyAppColors.darkTextPrimary,
-    );
-
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: wsyColorScheme,
-      scaffoldBackgroundColor: WsyAppColors.darkBackground,
-      textTheme: WsyAppTextStyles.darkTextTheme,
-      inputDecorationTheme: _inputDecorationTheme,
-      filledButtonTheme: _filledButtonTheme,
-      dividerTheme: const DividerThemeData(
-        color: WsyAppColors.darkSurface,
-        thickness: 1,
-      ),
-      visualDensity: VisualDensity.adaptivePlatformDensity,
     );
   }
 }
