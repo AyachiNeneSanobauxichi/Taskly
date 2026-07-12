@@ -1,0 +1,8 @@
+# Flutter gen-l10n 配置：根据 lib/l10n/*.arb 生成本地化代码
+# 生成产物直接落到 lib/l10n/（synthetic-package 已废弃，改为源码生成）
+arb-dir: lib/l10n
+template-arb-file: app_en.arb # 以英文为模板（含 metadata/占位符定义）
+output-dir: lib/l10n
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+nullable-getter: false # AppLocalizations.of(context) 返回非空，调用处更简洁

@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:form_builder_validators/form_builder_validators.dart";
 import "package:todo_app_v1/features/auth/index.dart";
+import "package:todo_app_v1/l10n/app_localizations.dart";
 import "package:todo_app_v1/theme/index.dart";
 import "package:todo_app_v1/widgets/index.dart";
 
@@ -30,8 +31,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // 提示未勾选协议
       return;
     }
-    // 全部通过 → 调用注册逻辑
-    print("注册成功");
+    // 全部通过 → 调用注册逻辑（v1 仅静态 UI，逻辑后续接入）
+    // TODO(auth): 接入注册接口，成功后跳转；当前仅占位
   }
 
   @override
@@ -47,6 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -75,21 +77,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
                 Text(
-                  "创建账号",
+                  l10n.registerTitle,
                   style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: WsyAppSpacing.xs),
                 Text(
-                  "开始管理你的任务",
+                  l10n.registerSubtitle,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: WsyAppSpacing.lg),
                 AuthInput(
-                  label: "用户名",
+                  label: l10n.registerUsernameLabel,
                   icon: Icons.person_outline,
                   controller: _nameController,
                   autofillHints: [AutofillHints.newUsername],
@@ -101,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
                 AuthInput(
-                  label: "邮箱",
+                  label: l10n.authEmailLabel,
                   icon: Icons.mail_outline,
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -113,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
                 AuthPassword(
-                  label: "密码",
+                  label: l10n.authPasswordLabel,
                   controller: _passwordController,
                   autofillHints: [AutofillHints.newPassword],
                   validator: FormBuilderValidators.compose([
@@ -124,13 +126,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
                 AuthPassword(
-                  label: "确认密码",
+                  label: l10n.registerConfirmPasswordLabel,
                   controller: _confirmPasswordController,
                   autofillHints: [AutofillHints.newPassword],
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
-                    (value) =>
-                        value == _passwordController.text ? null : "两次密码不一致",
+                    (value) => value == _passwordController.text
+                        ? null
+                        : l10n.registerPasswordMismatch,
                   ]),
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
@@ -140,25 +143,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     TextSpan(
                       style: theme.textTheme.bodySmall,
                       children: [
-                        const TextSpan(text: "我已阅读并同意"),
+                        TextSpan(text: l10n.registerAgreementPrefix),
                         TextSpan(
-                          text: "《用户协议》",
+                          text: l10n.registerUserAgreement,
                           style: TextStyle(color: theme.colorScheme.primary),
                         ),
-                        const TextSpan(text: "和"),
+                        TextSpan(text: l10n.registerAgreementAnd),
                         TextSpan(
-                          text: "《隐私政策》",
+                          text: l10n.registerPrivacyPolicy,
                           style: TextStyle(color: theme.colorScheme.primary),
                         ),
                       ],
                     ),
                   ),
-                  validator: (v) => (v ?? false) ? null : "请先阅读并同意用户协议",
+                  validator: (v) =>
+                      (v ?? false) ? null : l10n.registerAgreementRequired,
                   onChanged: (value) => setState(() => _isChecked = value),
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
                 WsyButton(
-                  label: "注册",
+                  label: l10n.registerSubmit,
                   onPressed: _onRegister,
                   isFullWidth: true,
                 ),
@@ -167,7 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   spacing: WsyAppSpacing.sm,
                   children: [
                     const Expanded(child: Divider()),
-                    Text("或", style: theme.textTheme.bodySmall),
+                    Text(l10n.commonOr, style: theme.textTheme.bodySmall),
                     const Expanded(child: Divider()),
                   ],
                 ),
@@ -189,9 +193,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     TextSpan(
                       style: theme.textTheme.bodyMedium,
                       children: [
-                        const TextSpan(text: "已有账号？"),
+                        TextSpan(text: l10n.registerHaveAccount),
                         TextSpan(
-                          text: "去登录",
+                          text: l10n.registerGoLogin,
                           style: TextStyle(
                             color: theme.colorScheme.primary,
                             fontWeight: FontWeight.w600,

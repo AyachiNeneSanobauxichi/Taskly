@@ -47,4 +47,21 @@ MaterialApp.router(
 );
 ```
 
-> 若采用 Flutter 官方 `gen-l10n`：新增 `l10n.yaml` 与 `lib/l10n/*.arb`，`flutter gen-l10n` 生成；文案通过 `AppLocalizations.of(context)` 访问。当前仅装了 `intl`，如需完整 i18n 可再引入 `flutter_localizations`（SDK 内置）。
+## 📌 本项目已启用 gen-l10n（现状）
+
+基建已就绪，业务侧**直接用**，不要再自己搭：
+
+- 配置：项目根 `l10n.yaml`；`pubspec.yaml` 里 `flutter: generate: true`。
+- 文案源：`lib/l10n/app_en.arb`（模板，含 `@key` 描述/占位符）+ `lib/l10n/app_zh.arb`。
+- 生成产物：`lib/l10n/app_localizations*.dart`（`output-class: AppLocalizations`，`nullable-getter: false`）。
+- 装配：`app.dart` 用 `AppLocalizations.localizationsDelegates`（+ `FormBuilderLocalizations.delegate`）与 `AppLocalizations.supportedLocales`；**不写死 `locale`**，跟随系统。
+- 访问：`final l10n = AppLocalizations.of(context);` 然后 `l10n.<key>`。
+
+```dart
+import "package:todo_app_v1/l10n/app_localizations.dart";
+// ...
+final l10n = AppLocalizations.of(context);
+Text(l10n.loginTitle);
+```
+
+**加新文案**：先在 `app_en.arb` 加 `key` + `@key`（description），再在 `app_zh.arb` 加对应中文，然后 `flutter gen-l10n` 重新生成。两个 arb 的 key 必须一一对应。

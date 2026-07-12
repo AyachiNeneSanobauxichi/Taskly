@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:todo_app_v1/l10n/app_localizations.dart";
 
 class AuthPassword extends StatefulWidget {
   const AuthPassword({
@@ -28,6 +29,7 @@ class _AuthPasswordState extends State<AuthPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return TextFormField(
       controller: widget.controller,
       autovalidateMode: widget.autovalidateMode,
@@ -40,7 +42,7 @@ class _AuthPasswordState extends State<AuthPassword> {
         prefixIcon: const Icon(Icons.lock_outline),
         suffixIcon: IconButton(
           onPressed: _toggle,
-          tooltip: _obscure ? "显示密码" : "隐藏密码",
+          tooltip: _obscure ? l10n.authShowPassword : l10n.authHidePassword,
           icon: Icon(
             _obscure
                 ? Icons.visibility_off_outlined

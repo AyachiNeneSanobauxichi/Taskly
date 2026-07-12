@@ -1,0 +1,32 @@
+{
+  "@@locale": "zh",
+
+  "appTitle": "Taskly",
+
+  "commonOr": "或",
+  "authEmailLabel": "邮箱",
+  "authPasswordLabel": "密码",
+  "authShowPassword": "显示密码",
+  "authHidePassword": "隐藏密码",
+
+  "loginTitle": "欢迎回来",
+  "loginSubtitle": "登录以继续管理你的任务",
+  "loginForgotPassword": "忘记密码？",
+  "loginSubmit": "登录",
+  "loginNoAccount": "还没有账号？",
+  "loginGoRegister": "去注册",
+
+  "registerTitle": "创建账号",
+  "registerSubtitle": "开始管理你的任务",
+  "registerUsernameLabel": "用户名",
+  "registerConfirmPasswordLabel": "确认密码",
+  "registerPasswordMismatch": "两次密码不一致",
+  "registerAgreementPrefix": "我已阅读并同意",
+  "registerUserAgreement": "《用户协议》",
+  "registerAgreementAnd": "和",
+  "registerPrivacyPolicy": "《隐私政策》",
+  "registerAgreementRequired": "请先阅读并同意用户协议",
+  "registerSubmit": "注册",
+  "registerHaveAccount": "已有账号？",
+  "registerGoLogin": "去登录"
+}

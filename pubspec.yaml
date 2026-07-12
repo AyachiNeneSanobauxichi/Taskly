@@ -35,3 +35,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true # 开启 gen-l10n：根据 lib/l10n/*.arb 生成 AppLocalizations

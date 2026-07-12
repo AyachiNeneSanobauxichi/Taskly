@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:form_builder_validators/form_builder_validators.dart";
 import "package:todo_app_v1/features/auth/index.dart";
+import "package:todo_app_v1/l10n/app_localizations.dart";
 import "package:todo_app_v1/theme/index.dart";
 import "package:todo_app_v1/widgets/index.dart";
 
@@ -34,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -62,21 +64,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
                 Text(
-                  "欢迎回来",
+                  l10n.loginTitle,
                   style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: WsyAppSpacing.xs),
                 Text(
-                  "登录以继续管理你的任务",
+                  l10n.loginSubtitle,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: WsyAppSpacing.lg),
                 AuthInput(
-                  label: "邮箱",
+                  label: l10n.authEmailLabel,
                   icon: Icons.mail_outline,
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -89,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
                 AuthPassword(
-                  label: "密码",
+                  label: l10n.authPasswordLabel,
                   controller: _passwordController,
                   textInputAction: TextInputAction.done,
                   autofillHints: [AutofillHints.password],
@@ -104,17 +106,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {},
-                    child: const Text("忘记密码？"),
+                    child: Text(l10n.loginForgotPassword),
                   ),
                 ),
                 const SizedBox(height: WsyAppSpacing.sm),
-                WsyButton(label: "登录", onPressed: _onLogin, isFullWidth: true),
+                WsyButton(
+                  label: l10n.loginSubmit,
+                  onPressed: _onLogin,
+                  isFullWidth: true,
+                ),
                 const SizedBox(height: WsyAppSpacing.md),
                 Row(
                   spacing: WsyAppSpacing.sm,
                   children: [
                     const Expanded(child: Divider()),
-                    Text("或", style: theme.textTheme.bodySmall),
+                    Text(l10n.commonOr, style: theme.textTheme.bodySmall),
                     const Expanded(child: Divider()),
                   ],
                 ),
@@ -134,9 +140,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextSpan(
                       style: theme.textTheme.bodyMedium,
                       children: [
-                        const TextSpan(text: "还没有账号？"),
+                        TextSpan(text: l10n.loginNoAccount),
                         TextSpan(
-                          text: "去注册",
+                          text: l10n.loginGoRegister,
                           style: TextStyle(
                             color: theme.colorScheme.primary,
                             fontWeight: FontWeight.w600,
