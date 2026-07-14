@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:form_builder_validators/form_builder_validators.dart";
+import "package:toastification/toastification.dart";
 import "package:todo_app_v1/app/router/index.dart";
 import "package:todo_app_v1/core/theme/index.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
@@ -27,6 +28,8 @@ class WsyApp extends ConsumerWidget {
       ],
       debugShowCheckedModeBanner: true,
       routerConfig: router, // go_router 装配（provider 提供）
+      // 全局挂载 toast overlay：轻提示（WsyToast）需要它承载。
+      builder: (context, child) => ToastificationWrapper(child: child!),
     );
   }
 }

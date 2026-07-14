@@ -107,3 +107,37 @@ abstract final class Spacing {
   static const xl = 32.0;
 }
 ```
+
+## 📌 加载态：用骨架屏，不用 loading 转圈
+
+接口请求 / 异步加载「内容型」界面（列表、详情、表单预填）时，**优先用骨架屏**（`skeletonizer`）占位，**不要**用 `CircularProgressIndicator` 等 loading 转圈。
+
+```dart
+import "package:skeletonizer/skeletonizer.dart";
+
+// 用真实布局包一层 Skeletonizer：加载时自动渲染成骨架，数据到位后原样展示。
+Skeletonizer(
+  enabled: isLoading,
+  child: ListView.builder(
+    // 加载中喂「若干条占位数据」给同一套 item widget，骨架形状自动贴合真实布局。
+    itemCount: isLoading ? 6 : items.length,
+    itemBuilder: (_, i) => TodoListItem(todo: isLoading ? Todo.placeholder() : items[i]),
+  ),
+)
+```
+
+- **页面级 / 列表级加载一律骨架屏**；骨架用同一套 item widget + 占位数据渲染，不另写占位形状。
+- 例外：按钮内联忙碌态（提交中）仍可用小转圈（如 `WsyButton.isLoading`）。
+- 存量 `CircularProgressIndicator` 逐步迁移到骨架屏。
+
+## 📌 轻提示：统一走 WsyToast
+
+用户提示（成功 / 失败 / 信息）**一律用 `WsyToast`**（`lib/shared/widgets/toast/`，基于 `toastification`），**不要**直接用 `ScaffoldMessenger.showSnackBar` 或裸调 `toastification`。app 根已挂 `ToastificationWrapper`（`app.dart`）。
+
+```dart
+WsyToast.success(context, l10n.todoSaveSuccess);
+WsyToast.error(context, failure.displayMessage);
+WsyToast.info(context, message);
+```
+
+> 样式（顶部、扁平语义色、3 秒自动关）集中在 `WsyToast`，改样式只改一处。存量 `SnackBar` 逐步迁移。
