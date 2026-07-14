@@ -1,6 +1,11 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
+  errors:
+    # freezed 在 factory 构造参数上转发 @JsonKey（字段重命名 / includeIfNull 等）
+    # 会触发 invalid_annotation_target；这是 freezed + json_serializable 的已知
+    # 组合限制，官方推荐在此忽略。
+    invalid_annotation_target: ignore
   # 生成产物不参与静态检查：json_serializable 输出用单引号，与本仓库
   # prefer_double_quotes 冲突；freezed/l10n 产物同理不该被 lint。
   exclude:
