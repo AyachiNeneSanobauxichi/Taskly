@@ -84,6 +84,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get registerGoLogin => '去登录';
 
   @override
+  String get authErrorGeneric => '出错了，请稍后再试';
+
+  @override
+  String get registerSuccess => '注册成功，请登录';
+
+  @override
   String get homeTitle => '首页（占位）';
 
   @override

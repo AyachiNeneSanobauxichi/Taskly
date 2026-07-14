@@ -30,6 +30,9 @@
   "registerHaveAccount": "已有账号？",
   "registerGoLogin": "去登录",
 
+  "authErrorGeneric": "出错了，请稍后再试",
+  "registerSuccess": "注册成功，请登录",
+
   "homeTitle": "首页（占位）",
   "homeBackToLogin": "返回登录",
   "routeNotFound": "页面不存在"

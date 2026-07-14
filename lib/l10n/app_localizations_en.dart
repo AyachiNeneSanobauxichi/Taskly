@@ -85,6 +85,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registerGoLogin => 'Log in';
 
   @override
+  String get authErrorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get registerSuccess => 'Account created. Please log in.';
+
+  @override
   String get homeTitle => 'Home (placeholder)';
 
   @override

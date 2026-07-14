@@ -105,6 +105,15 @@
     "description": "Link that navigates to the login screen"
   },
 
+  "authErrorGeneric": "Something went wrong. Please try again.",
+  "@authErrorGeneric": {
+    "description": "Generic fallback error message shown when an auth request fails"
+  },
+  "registerSuccess": "Account created. Please log in.",
+  "@registerSuccess": {
+    "description": "Snackbar shown after a successful registration, prompting the user to log in"
+  },
+
   "homeTitle": "Home (placeholder)",
   "@homeTitle": {
     "description": "Placeholder text shown on the home screen in v1 routing"

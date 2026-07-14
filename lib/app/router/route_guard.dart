@@ -1,11 +1,30 @@
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
+import "package:todo_app_v1/app/router/route_name.dart";
+import "package:todo_app_v1/features/auth/index.dart";
 
-/// 鉴权守卫：集中处理登录态相关的重定向。
+/// 鉴权守卫（v2）：依据登录态集中处理重定向。
 ///
-/// v1 暂无鉴权状态，一律放行（返回 null）。
-/// TODO(auth): 接入 authController 后，未登录访问受保护路由重定向到 login，
-/// 已登录访问 login/register 重定向到 home；届时把本函数改为接收 AuthState，
-/// 并把 [appRouter] 改造为 @riverpod provider 以支持 refreshListenable。
-String? guardRedirect(GoRouterState state) {
-  return null;
+/// 三态：
+/// - 未定（冷启动静默刷新中，`AsyncLoading`）→ 停在 splash，不干预。
+/// - 已登录 → 不该停在 splash / login / register，跳 home。
+/// - 未登录 → 只能待在 login / register，其余一律回 login。
+String? guardRedirect(AsyncValue<AuthState> auth, GoRouterState state) {
+  final loc = state.matchedLocation;
+  final onSplash = loc == RoutePath.splash;
+  final onAuthPages = loc == RoutePath.login || loc == RoutePath.register;
+
+  if (auth.isLoading) {
+    return onSplash ? null : RoutePath.splash;
+  }
+
+  final authed = switch (auth) {
+    AsyncData(value: Authenticated()) => true,
+    _ => false,
+  };
+
+  if (authed) {
+    return (onSplash || onAuthPages) ? RoutePath.home : null;
+  }
+  return onAuthPages ? null : RoutePath.login;
 }

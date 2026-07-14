@@ -1,8 +1,10 @@
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:form_builder_validators/form_builder_validators.dart";
 import "package:go_router/go_router.dart";
 import "package:todo_app_v1/app/router/index.dart";
+import "package:todo_app_v1/core/error/index.dart";
 import "package:todo_app_v1/core/theme/index.dart";
 import "package:todo_app_v1/features/auth/index.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
@@ -10,14 +12,14 @@ import "package:todo_app_v1/shared/widgets/index.dart";
 
 export "widgets/index.dart";
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
@@ -25,6 +27,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _isChecked = false;
+
+  // 注册是「提交后导航离开」的一次性动作，不产生共享登录态（后端不下发令牌），
+  // 故用本地提交标记控制按钮 loading，而非塞进 authController 的 AsyncValue。
+  bool _isSubmitting = false;
 
   // "去登录" 富文本链接的点击识别器（需随 State 释放）。
   late final TapGestureRecognizer _goLoginTap;
@@ -36,16 +42,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ..onTap = () => context.goNamed(RouteName.login);
   }
 
-  void _onRegister() {
+  Future<void> _onRegister() async {
+    // 表单校验已含协议勾选（WsyCheckboxFormField 自带 validator）。
     final formValid = _formKey.currentState!.validate();
-    if (!formValid) return; // 输入框有错，停止
-    if (!_isChecked) {
-      // 协议单独校验（见下）
-      // 提示未勾选协议
-      return;
+    if (!formValid) return; // 输入框/协议有错，停止
+
+    // 跨 await 前先捕获依赖 context 的对象，避免 async gap 后再读 context。
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    setState(() => _isSubmitting = true);
+    try {
+      await ref
+          .read(authControllerProvider.notifier)
+          .register(
+            username: _nameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
+      if (!mounted) return;
+      // 注册成功：提示并回登录页（后端不下发令牌，需再登录）。
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(l10n.registerSuccess)));
+      context.goNamed(RouteName.login);
+    } on Object catch (e) {
+      if (!mounted) return;
+      final msg = e is Failure ? e.displayMessage : l10n.authErrorGeneric;
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(msg)));
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
     }
-    // 全部通过 → 调用注册逻辑（v1 仅静态 UI，逻辑后续接入）
-    // TODO(auth): 接入注册接口，成功后跳转；当前仅占位
   }
 
   @override
@@ -178,6 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 WsyButton(
                   label: l10n.registerSubmit,
                   onPressed: _onRegister,
+                  isLoading: _isSubmitting,
                   isFullWidth: true,
                 ),
                 const SizedBox(height: WsyAppSpacing.md),

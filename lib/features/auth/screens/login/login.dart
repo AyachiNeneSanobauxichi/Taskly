@@ -1,25 +1,31 @@
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:form_builder_validators/form_builder_validators.dart";
 import "package:go_router/go_router.dart";
 import "package:todo_app_v1/app/router/index.dart";
+import "package:todo_app_v1/core/error/index.dart";
 import "package:todo_app_v1/core/theme/index.dart";
 import "package:todo_app_v1/features/auth/index.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
 import "package:todo_app_v1/shared/widgets/index.dart";
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  // 登录进行中的本地标记（控制按钮 loading）。登录成功的导航由路由守卫依据
+  // 全局登录态自动完成，故此处不手动 goNamed。
+  bool _isSubmitting = false;
 
   // "去注册" 富文本链接的点击识别器（需随 State 释放）。
   late final TapGestureRecognizer _goRegisterTap;
@@ -31,12 +37,33 @@ class _LoginScreenState extends State<LoginScreen> {
       ..onTap = () => context.goNamed(RouteName.register);
   }
 
-  void _onLogin() {
+  Future<void> _onLogin() async {
     final formValid = _formKey.currentState!.validate();
     if (!formValid) return; // 输入框有错，停止
-    // v1 仅静态 UI，暂无登录逻辑；校验通过直接进首页。
-    // TODO(auth): 接入登录接口，成功后再跳转 home。
-    context.goNamed(RouteName.home);
+
+    // 跨 await 前先捕获依赖 context 的对象，避免 async gap 后再读 context。
+    final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
+    setState(() => _isSubmitting = true);
+    try {
+      // 登录 API 用 identifier（用户名或邮箱），这里传邮箱输入值。
+      // 成功后全局登录态翻转，路由守卫自动跳转 home。
+      await ref
+          .read(authControllerProvider.notifier)
+          .login(
+            identifier: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
+    } on Object catch (e) {
+      if (!mounted) return;
+      final msg = e is Failure ? e.displayMessage : l10n.authErrorGeneric;
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(msg)));
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
   }
 
   @override
@@ -129,6 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 WsyButton(
                   label: l10n.loginSubmit,
                   onPressed: _onLogin,
+                  isLoading: _isSubmitting,
                   isFullWidth: true,
                 ),
                 const SizedBox(height: WsyAppSpacing.md),

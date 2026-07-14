@@ -248,6 +248,18 @@ abstract class AppLocalizations {
   /// **'Log in'**
   String get registerGoLogin;
 
+  /// Generic fallback error message shown when an auth request fails
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get authErrorGeneric;
+
+  /// Snackbar shown after a successful registration, prompting the user to log in
+  ///
+  /// In en, this message translates to:
+  /// **'Account created. Please log in.'**
+  String get registerSuccess;
+
   /// Placeholder text shown on the home screen in v1 routing
   ///
   /// In en, this message translates to:
