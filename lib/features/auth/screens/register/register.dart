@@ -141,7 +141,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
                     FormBuilderValidators.minLength(3),
-                    FormBuilderValidators.maxLength(16),
+                    FormBuilderValidators.maxLength(20),
                   ]),
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
@@ -161,10 +161,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   label: l10n.authPasswordLabel,
                   controller: _passwordController,
                   autofillHints: [AutofillHints.newPassword],
+                  // 密码复杂度（v2）：至少 8 位，且含大小写字母、数字、特殊字符。
+                  // 正则与后端 passwordSchema 保持一致，特殊字符限定 @$!%*?& 。
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
                     FormBuilderValidators.minLength(8),
-                    FormBuilderValidators.maxLength(16),
+                    FormBuilderValidators.match(
+                      RegExp(
+                        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
+                      ),
+                      errorText: l10n.authPasswordWeak,
+                      checkNullOrEmpty: false,
+                    ),
                   ]),
                 ),
                 const SizedBox(height: WsyAppSpacing.md),

@@ -20,7 +20,8 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final _emailController = TextEditingController();
+  // 登录标识符：邮箱或用户名（v2）。后端登录用 identifier 字段，不限定为邮箱。
+  final _identifierController = TextEditingController();
   final _passwordController = TextEditingController();
 
   // 登录进行中的本地标记（控制按钮 loading）。登录成功的导航由路由守卫依据
@@ -52,7 +53,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       await ref
           .read(authControllerProvider.notifier)
           .login(
-            identifier: _emailController.text.trim(),
+            identifier: _identifierController.text.trim(),
             password: _passwordController.text,
           );
     } on Object catch (e) {
@@ -69,7 +70,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   void dispose() {
     _formKey.currentState?.dispose();
-    _emailController.dispose();
+    _identifierController.dispose();
     _passwordController.dispose();
     _goRegisterTap.dispose();
     super.dispose();
@@ -121,28 +122,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: WsyAppSpacing.lg),
                 AuthInput(
-                  label: l10n.authEmailLabel,
-                  icon: Icons.mail_outline,
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
+                  // v2：登录标识符接受邮箱或用户名，故不再做邮箱格式校验，仅校验必填。
+                  label: l10n.authIdentifierLabel,
+                  icon: Icons.person_outline,
+                  controller: _identifierController,
                   textInputAction: TextInputAction.next,
-                  autofillHints: [AutofillHints.email],
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                    FormBuilderValidators.email(),
-                  ]),
+                  autofillHints: [AutofillHints.username],
+                  validator: FormBuilderValidators.required(),
                 ),
                 const SizedBox(height: WsyAppSpacing.md),
                 AuthPassword(
+                  // 登录只校验必填：密码复杂度规则属于注册期约束，登录不重复施加。
                   label: l10n.authPasswordLabel,
                   controller: _passwordController,
                   textInputAction: TextInputAction.done,
                   autofillHints: [AutofillHints.password],
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                    FormBuilderValidators.minLength(8),
-                    FormBuilderValidators.maxLength(16),
-                  ]),
+                  validator: FormBuilderValidators.required(),
                 ),
                 const SizedBox(height: WsyAppSpacing.xs),
                 Align(

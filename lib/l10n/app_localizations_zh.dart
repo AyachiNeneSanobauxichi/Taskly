@@ -27,6 +27,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get authHidePassword => '隐藏密码';
 
   @override
+  String get authIdentifierLabel => '邮箱或用户名';
+
+  @override
+  String get authPasswordWeak => '密码需包含至少一个大写字母、一个小写字母、一个数字和一个特殊字符';
+
+  @override
   String get loginTitle => '欢迎回来';
 
   @override

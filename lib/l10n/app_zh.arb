@@ -8,6 +8,8 @@
   "authPasswordLabel": "密码",
   "authShowPassword": "显示密码",
   "authHidePassword": "隐藏密码",
+  "authIdentifierLabel": "邮箱或用户名",
+  "authPasswordWeak": "密码需包含至少一个大写字母、一个小写字母、一个数字和一个特殊字符",
 
   "loginTitle": "欢迎回来",
   "loginSubtitle": "登录以继续管理你的任务",

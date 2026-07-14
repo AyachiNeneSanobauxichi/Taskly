@@ -27,6 +27,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authHidePassword => 'Hide password';
 
   @override
+  String get authIdentifierLabel => 'Email or username';
+
+  @override
+  String get authPasswordWeak =>
+      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character';
+
+  @override
   String get loginTitle => 'Welcome back';
 
   @override

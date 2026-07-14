@@ -134,6 +134,18 @@ abstract class AppLocalizations {
   /// **'Hide password'**
   String get authHidePassword;
 
+  /// Label for the login identifier field that accepts an email or a username
+  ///
+  /// In en, this message translates to:
+  /// **'Email or username'**
+  String get authIdentifierLabel;
+
+  /// Validation error when the password does not meet the complexity requirements
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'**
+  String get authPasswordWeak;
+
   /// Login screen headline
   ///
   /// In en, this message translates to:

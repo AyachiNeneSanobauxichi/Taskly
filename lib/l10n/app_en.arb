@@ -26,6 +26,14 @@
   "@authHidePassword": {
     "description": "Tooltip for the button that hides the password"
   },
+  "authIdentifierLabel": "Email or username",
+  "@authIdentifierLabel": {
+    "description": "Label for the login identifier field that accepts an email or a username"
+  },
+  "authPasswordWeak": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+  "@authPasswordWeak": {
+    "description": "Validation error when the password does not meet the complexity requirements"
+  },
 
   "loginTitle": "Welcome back",
   "@loginTitle": {
