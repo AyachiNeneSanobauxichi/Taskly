@@ -7,8 +7,9 @@ import "package:flutter_dotenv/flutter_dotenv.dart";
 /// 若 `.env` 未加载或缺字段，回退到本地开发默认值，保证不会因缺配置而崩溃。
 abstract final class Env {
   /// 服务器根地址（**不含**路径前缀），如 `http://localhost:3000`。默认本地后端。
-  static String get baseUrl =>
-      _stripTrailingSlash(dotenv.maybeGet("BASE_URL") ?? "http://localhost:3000");
+  static String get baseUrl => _stripTrailingSlash(
+    dotenv.maybeGet("BASE_URL") ?? "http://localhost:3000",
+  );
 
   /// 全局接口前缀，如 `/api`。所有请求路径都拼在它之上。
   static String get apiPrefix =>

@@ -104,5 +104,97 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeBackToLogin => 'Back to login';
 
   @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get commonSave => 'Save';
+
+  @override
+  String get commonRetry => 'Retry';
+
+  @override
+  String get todoListTitle => 'My Tasks';
+
+  @override
+  String get todoSearchHint => 'Search tasks';
+
+  @override
+  String get todoLogout => 'Log out';
+
+  @override
+  String get todoEmpty => 'No tasks yet';
+
+  @override
+  String get todoLoadError => 'Failed to load. Pull to refresh.';
+
+  @override
+  String get todoActionEdit => 'Edit';
+
+  @override
+  String get todoActionDelete => 'Delete';
+
+  @override
+  String get todoFilterTypeAll => 'All types';
+
+  @override
+  String get todoFilterStatusAll => 'All statuses';
+
+  @override
+  String get todoTypeNormal => 'Normal';
+
+  @override
+  String get todoTypeImportant => 'Important';
+
+  @override
+  String get todoTypeUrgent => 'Urgent';
+
+  @override
+  String get todoStatusPending => 'Pending';
+
+  @override
+  String get todoStatusDoing => 'Doing';
+
+  @override
+  String get todoStatusCompleted => 'Completed';
+
+  @override
+  String get todoDeleteTitle => 'Delete task?';
+
+  @override
+  String todoDeleteMessage(String name) {
+    return '\"$name\" will be deleted.';
+  }
+
+  @override
+  String get todoDeleteSuccess => 'Task deleted';
+
+  @override
+  String get todoEditTitle => 'Edit task';
+
+  @override
+  String get todoFieldName => 'Name';
+
+  @override
+  String get todoFieldContent => 'Content';
+
+  @override
+  String get todoFieldType => 'Type';
+
+  @override
+  String get todoFieldStatus => 'Status';
+
+  @override
+  String get todoSaveSuccess => 'Saved';
+
+  @override
+  String get todoDetailTitle => 'Task detail';
+
+  @override
+  String get todoDetailCreatedAt => 'Created at';
+
+  @override
+  String get todoDetailUpdatedAt => 'Updated at';
+
+  @override
   String get routeNotFound => 'Page not found';
 }

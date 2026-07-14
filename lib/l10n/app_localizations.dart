@@ -284,6 +284,186 @@ abstract class AppLocalizations {
   /// **'Back to login'**
   String get homeBackToLogin;
 
+  /// Generic cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// Generic save button label
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get commonSave;
+
+  /// Generic retry button label
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get commonRetry;
+
+  /// Todo list screen title
+  ///
+  /// In en, this message translates to:
+  /// **'My Tasks'**
+  String get todoListTitle;
+
+  /// Placeholder for the todo name search field
+  ///
+  /// In en, this message translates to:
+  /// **'Search tasks'**
+  String get todoSearchHint;
+
+  /// Logout action tooltip on the todo list app bar
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get todoLogout;
+
+  /// Empty state on the todo list
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks yet'**
+  String get todoEmpty;
+
+  /// Error state on the todo list
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load. Pull to refresh.'**
+  String get todoLoadError;
+
+  /// Edit action in the todo item menu
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get todoActionEdit;
+
+  /// Delete action in the todo item menu
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get todoActionDelete;
+
+  /// Type filter option meaning no type filter
+  ///
+  /// In en, this message translates to:
+  /// **'All types'**
+  String get todoFilterTypeAll;
+
+  /// Status filter option meaning no status filter
+  ///
+  /// In en, this message translates to:
+  /// **'All statuses'**
+  String get todoFilterStatusAll;
+
+  /// Todo type: normal
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get todoTypeNormal;
+
+  /// Todo type: important
+  ///
+  /// In en, this message translates to:
+  /// **'Important'**
+  String get todoTypeImportant;
+
+  /// Todo type: urgent
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent'**
+  String get todoTypeUrgent;
+
+  /// Todo status: pending
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get todoStatusPending;
+
+  /// Todo status: doing
+  ///
+  /// In en, this message translates to:
+  /// **'Doing'**
+  String get todoStatusDoing;
+
+  /// Todo status: completed
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get todoStatusCompleted;
+
+  /// Delete confirmation dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete task?'**
+  String get todoDeleteTitle;
+
+  /// Delete confirmation dialog message
+  ///
+  /// In en, this message translates to:
+  /// **'\"{name}\" will be deleted.'**
+  String todoDeleteMessage(String name);
+
+  /// Snackbar after a successful delete
+  ///
+  /// In en, this message translates to:
+  /// **'Task deleted'**
+  String get todoDeleteSuccess;
+
+  /// Title of the edit bottom sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Edit task'**
+  String get todoEditTitle;
+
+  /// Label for the todo name field
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get todoFieldName;
+
+  /// Label for the todo content field
+  ///
+  /// In en, this message translates to:
+  /// **'Content'**
+  String get todoFieldContent;
+
+  /// Label for the todo type field
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get todoFieldType;
+
+  /// Label for the todo status field
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get todoFieldStatus;
+
+  /// Snackbar after a successful save
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get todoSaveSuccess;
+
+  /// Todo detail screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Task detail'**
+  String get todoDetailTitle;
+
+  /// Label for the created-at timestamp on the detail screen
+  ///
+  /// In en, this message translates to:
+  /// **'Created at'**
+  String get todoDetailCreatedAt;
+
+  /// Label for the updated-at timestamp on the detail screen
+  ///
+  /// In en, this message translates to:
+  /// **'Updated at'**
+  String get todoDetailUpdatedAt;
+
   /// Message shown by the router error page for an unknown route
   ///
   /// In en, this message translates to:

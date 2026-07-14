@@ -7,6 +7,7 @@ abstract final class RouteName {
   static const login = "login";
   static const register = "register";
   static const home = "home";
+  static const todoDetail = "todoDetail";
 }
 
 abstract final class RoutePath {
@@ -15,4 +16,7 @@ abstract final class RoutePath {
   static const login = "/login";
   static const register = "/register";
   static const home = "/home";
+
+  /// 任务详情，路径参数 `id`。用 `pushNamed(RouteName.todoDetail, pathParameters: {"id": ...})`。
+  static const todoDetail = "/todo/:id";
 }

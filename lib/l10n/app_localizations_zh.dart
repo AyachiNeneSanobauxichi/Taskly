@@ -102,5 +102,97 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeBackToLogin => '返回登录';
 
   @override
+  String get commonCancel => '取消';
+
+  @override
+  String get commonSave => '保存';
+
+  @override
+  String get commonRetry => '重试';
+
+  @override
+  String get todoListTitle => '我的任务';
+
+  @override
+  String get todoSearchHint => '搜索任务';
+
+  @override
+  String get todoLogout => '登出';
+
+  @override
+  String get todoEmpty => '暂无任务';
+
+  @override
+  String get todoLoadError => '加载失败，下拉刷新重试';
+
+  @override
+  String get todoActionEdit => '编辑';
+
+  @override
+  String get todoActionDelete => '删除';
+
+  @override
+  String get todoFilterTypeAll => '全部类型';
+
+  @override
+  String get todoFilterStatusAll => '全部状态';
+
+  @override
+  String get todoTypeNormal => '普通';
+
+  @override
+  String get todoTypeImportant => '重要';
+
+  @override
+  String get todoTypeUrgent => '紧急';
+
+  @override
+  String get todoStatusPending => '待办';
+
+  @override
+  String get todoStatusDoing => '进行中';
+
+  @override
+  String get todoStatusCompleted => '已完成';
+
+  @override
+  String get todoDeleteTitle => '删除任务？';
+
+  @override
+  String todoDeleteMessage(String name) {
+    return '将删除「$name」。';
+  }
+
+  @override
+  String get todoDeleteSuccess => '已删除';
+
+  @override
+  String get todoEditTitle => '编辑任务';
+
+  @override
+  String get todoFieldName => '名称';
+
+  @override
+  String get todoFieldContent => '内容';
+
+  @override
+  String get todoFieldType => '类型';
+
+  @override
+  String get todoFieldStatus => '状态';
+
+  @override
+  String get todoSaveSuccess => '已保存';
+
+  @override
+  String get todoDetailTitle => '任务详情';
+
+  @override
+  String get todoDetailCreatedAt => '创建时间';
+
+  @override
+  String get todoDetailUpdatedAt => '更新时间';
+
+  @override
   String get routeNotFound => '页面不存在';
 }

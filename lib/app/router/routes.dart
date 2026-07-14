@@ -24,6 +24,12 @@ final List<RouteBase> appRoutes = [
   GoRoute(
     name: RouteName.home,
     path: RoutePath.home,
-    builder: (context, state) => const HomeScreen(),
+    builder: (context, state) => const TodoListScreen(),
+  ),
+  GoRoute(
+    name: RouteName.todoDetail,
+    path: RoutePath.todoDetail,
+    builder: (context, state) =>
+        TodoDetailScreen(id: state.pathParameters["id"]!),
   ),
 ];

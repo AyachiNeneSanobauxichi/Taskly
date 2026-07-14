@@ -130,6 +130,133 @@
   "@homeBackToLogin": {
     "description": "Test button on the home screen that returns to the login screen"
   },
+  "commonCancel": "Cancel",
+  "@commonCancel": {
+    "description": "Generic cancel button label"
+  },
+  "commonSave": "Save",
+  "@commonSave": {
+    "description": "Generic save button label"
+  },
+  "commonRetry": "Retry",
+  "@commonRetry": {
+    "description": "Generic retry button label"
+  },
+
+  "todoListTitle": "My Tasks",
+  "@todoListTitle": {
+    "description": "Todo list screen title"
+  },
+  "todoSearchHint": "Search tasks",
+  "@todoSearchHint": {
+    "description": "Placeholder for the todo name search field"
+  },
+  "todoLogout": "Log out",
+  "@todoLogout": {
+    "description": "Logout action tooltip on the todo list app bar"
+  },
+  "todoEmpty": "No tasks yet",
+  "@todoEmpty": {
+    "description": "Empty state on the todo list"
+  },
+  "todoLoadError": "Failed to load. Pull to refresh.",
+  "@todoLoadError": {
+    "description": "Error state on the todo list"
+  },
+  "todoActionEdit": "Edit",
+  "@todoActionEdit": {
+    "description": "Edit action in the todo item menu"
+  },
+  "todoActionDelete": "Delete",
+  "@todoActionDelete": {
+    "description": "Delete action in the todo item menu"
+  },
+  "todoFilterTypeAll": "All types",
+  "@todoFilterTypeAll": {
+    "description": "Type filter option meaning no type filter"
+  },
+  "todoFilterStatusAll": "All statuses",
+  "@todoFilterStatusAll": {
+    "description": "Status filter option meaning no status filter"
+  },
+  "todoTypeNormal": "Normal",
+  "@todoTypeNormal": {
+    "description": "Todo type: normal"
+  },
+  "todoTypeImportant": "Important",
+  "@todoTypeImportant": {
+    "description": "Todo type: important"
+  },
+  "todoTypeUrgent": "Urgent",
+  "@todoTypeUrgent": {
+    "description": "Todo type: urgent"
+  },
+  "todoStatusPending": "Pending",
+  "@todoStatusPending": {
+    "description": "Todo status: pending"
+  },
+  "todoStatusDoing": "Doing",
+  "@todoStatusDoing": {
+    "description": "Todo status: doing"
+  },
+  "todoStatusCompleted": "Completed",
+  "@todoStatusCompleted": {
+    "description": "Todo status: completed"
+  },
+  "todoDeleteTitle": "Delete task?",
+  "@todoDeleteTitle": {
+    "description": "Delete confirmation dialog title"
+  },
+  "todoDeleteMessage": "\"{name}\" will be deleted.",
+  "@todoDeleteMessage": {
+    "description": "Delete confirmation dialog message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todoDeleteSuccess": "Task deleted",
+  "@todoDeleteSuccess": {
+    "description": "Snackbar after a successful delete"
+  },
+  "todoEditTitle": "Edit task",
+  "@todoEditTitle": {
+    "description": "Title of the edit bottom sheet"
+  },
+  "todoFieldName": "Name",
+  "@todoFieldName": {
+    "description": "Label for the todo name field"
+  },
+  "todoFieldContent": "Content",
+  "@todoFieldContent": {
+    "description": "Label for the todo content field"
+  },
+  "todoFieldType": "Type",
+  "@todoFieldType": {
+    "description": "Label for the todo type field"
+  },
+  "todoFieldStatus": "Status",
+  "@todoFieldStatus": {
+    "description": "Label for the todo status field"
+  },
+  "todoSaveSuccess": "Saved",
+  "@todoSaveSuccess": {
+    "description": "Snackbar after a successful save"
+  },
+  "todoDetailTitle": "Task detail",
+  "@todoDetailTitle": {
+    "description": "Todo detail screen title"
+  },
+  "todoDetailCreatedAt": "Created at",
+  "@todoDetailCreatedAt": {
+    "description": "Label for the created-at timestamp on the detail screen"
+  },
+  "todoDetailUpdatedAt": "Updated at",
+  "@todoDetailUpdatedAt": {
+    "description": "Label for the updated-at timestamp on the detail screen"
+  },
+
   "routeNotFound": "Page not found",
   "@routeNotFound": {
     "description": "Message shown by the router error page for an unknown route"
