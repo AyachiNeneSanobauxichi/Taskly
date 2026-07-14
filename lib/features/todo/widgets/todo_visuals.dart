@@ -7,14 +7,6 @@ import "package:todo_app_v1/l10n/app_localizations.dart";
 /// Todo 视觉元素（类型头像 + 类型/状态彩色徽章），列表页与详情页共用，
 /// 保证同一语义在两处配色一致。颜色一律取自 [ColorScheme]，不硬编码。
 
-// 简约线性图标：一眼区分类型，不喧宾夺主。
-IconData _typeIcon(TodoType type) => switch (type) {
-  TodoType.urgent => Icons.priority_high,
-  TodoType.important => Icons.star_outline,
-  TodoType.normal => Icons.circle_outlined,
-  TodoType.unknown => Icons.help_outline,
-};
-
 /// (底色, 前景色) 二元组。
 ({Color bg, Color fg}) _typeColors(ColorScheme scheme, TodoType type) =>
     switch (type) {
@@ -55,7 +47,8 @@ class TodoTypeAvatar extends StatelessWidget {
       width: WsyAppSpacing.xl,
       height: WsyAppSpacing.xl,
       decoration: BoxDecoration(color: colors.bg, shape: BoxShape.circle),
-      child: Icon(_typeIcon(type), color: colors.fg),
+      // 所有 item 统一图标；类型区分交给底色。
+      child: Icon(Icons.check_circle_outline, color: colors.fg),
     );
   }
 }

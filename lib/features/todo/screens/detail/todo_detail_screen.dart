@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:skeletonizer/skeletonizer.dart";
 import "package:todo_app_v1/core/theme/index.dart";
 import "package:todo_app_v1/features/todo/controllers/index.dart";
 import "package:todo_app_v1/features/todo/domain/index.dart";
@@ -21,34 +22,59 @@ class TodoDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.todoDetailTitle)),
-      body: detail.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: WsyAppSpacing.md,
-            children: [
-              Text(l10n.todoLoadError),
-              FilledButton(
-                onPressed: () => ref.invalidate(todoDetailProvider(id)),
-                child: Text(l10n.commonRetry),
-              ),
-            ],
-          ),
-        ),
-        data: (todo) => _DetailBody(todo: todo),
-      ),
-      // 仅在数据就绪时提供编辑入口。
+      body: _buildBody(context, ref, detail),
+      // 仅在数据就绪时提供编辑入口（纯图标按钮）。
       floatingActionButton: todo == null
           ? null
-          : FloatingActionButton.extended(
+          : FloatingActionButton(
               onPressed: () => showTodoEditSheet(context, todo: todo),
-              icon: const Icon(Icons.edit),
-              label: Text(l10n.todoActionEdit),
+              tooltip: l10n.todoActionEdit,
+              child: const Icon(Icons.edit),
             ),
     );
   }
+
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    AsyncValue<Todo> detail,
+  ) {
+    final l10n = AppLocalizations.of(context);
+
+    // 加载中：骨架屏。占位数据喂给同一套 _DetailBody，骨架形状自动贴合真实布局。
+    if (detail.isLoading) {
+      return Skeletonizer(child: _DetailBody(todo: _placeholderTodo()));
+    }
+    if (detail.hasError) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: WsyAppSpacing.md,
+          children: [
+            Text(l10n.todoLoadError),
+            FilledButton(
+              onPressed: () => ref.invalidate(todoDetailProvider(id)),
+              child: Text(l10n.commonRetry),
+            ),
+          ],
+        ),
+      );
+    }
+    return _DetailBody(todo: detail.requireValue);
+  }
 }
+
+/// 骨架屏占位数据：文本会被 Skeletonizer 遮成骨架条，只需保证有内容撑起布局。
+Todo _placeholderTodo() => Todo(
+  id: "",
+  name: "Placeholder task name",
+  content: "Placeholder content line used only to size the skeleton.",
+  userId: "",
+  type: TodoType.normal,
+  status: TodoStatus.pending,
+  createdAt: DateTime(2020),
+  updatedAt: DateTime(2020),
+);
 
 class _DetailBody extends StatelessWidget {
   const _DetailBody({required this.todo});
