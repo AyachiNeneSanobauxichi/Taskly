@@ -68,6 +68,12 @@
   "todoDetailTitle": "任务详情",
   "todoDetailCreatedAt": "创建时间",
   "todoDetailUpdatedAt": "更新时间",
+  "todoNewTask": "新建任务",
+  "todoCreateSuccess": "已创建",
+  "todoClearFilters": "清除全部",
+  "todoFilters": "筛选",
+  "commonApply": "应用",
+  "commonReset": "重置",
 
   "routeNotFound": "页面不存在"
 }

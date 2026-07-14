@@ -42,7 +42,7 @@ class TodoDetailScreen extends ConsumerWidget {
       floatingActionButton: todo == null
           ? null
           : FloatingActionButton.extended(
-              onPressed: () => showTodoEditSheet(context, todo),
+              onPressed: () => showTodoEditSheet(context, todo: todo),
               icon: const Icon(Icons.edit),
               label: Text(l10n.todoActionEdit),
             ),
@@ -72,8 +72,8 @@ class _DetailBody extends StatelessWidget {
           Row(
             spacing: WsyAppSpacing.sm,
             children: [
-              Chip(label: Text(todo.type.label(l10n))),
-              Chip(label: Text(todo.status.label(l10n))),
+              todoTypeBadge(context, todo.type),
+              todoStatusBadge(context, todo.status),
             ],
           ),
           if (content != null && content.isNotEmpty)

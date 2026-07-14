@@ -194,5 +194,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get todoDetailUpdatedAt => '更新时间';
 
   @override
+  String get todoNewTask => '新建任务';
+
+  @override
+  String get todoCreateSuccess => '已创建';
+
+  @override
+  String get todoClearFilters => '清除全部';
+
+  @override
+  String get todoFilters => '筛选';
+
+  @override
+  String get commonApply => '应用';
+
+  @override
+  String get commonReset => '重置';
+
+  @override
   String get routeNotFound => '页面不存在';
 }

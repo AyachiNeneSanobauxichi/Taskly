@@ -196,5 +196,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todoDetailUpdatedAt => 'Updated at';
 
   @override
+  String get todoNewTask => 'New task';
+
+  @override
+  String get todoCreateSuccess => 'Task created';
+
+  @override
+  String get todoClearFilters => 'Clear all';
+
+  @override
+  String get todoFilters => 'Filters';
+
+  @override
+  String get commonApply => 'Apply';
+
+  @override
+  String get commonReset => 'Reset';
+
+  @override
   String get routeNotFound => 'Page not found';
 }

@@ -256,6 +256,30 @@
   "@todoDetailUpdatedAt": {
     "description": "Label for the updated-at timestamp on the detail screen"
   },
+  "todoNewTask": "New task",
+  "@todoNewTask": {
+    "description": "Label for the create-task action (FAB) and the create sheet title"
+  },
+  "todoCreateSuccess": "Task created",
+  "@todoCreateSuccess": {
+    "description": "Snackbar after a successful create"
+  },
+  "todoClearFilters": "Clear all",
+  "@todoClearFilters": {
+    "description": "Button that clears all active search filters"
+  },
+  "todoFilters": "Filters",
+  "@todoFilters": {
+    "description": "Filter sheet title and filter button tooltip"
+  },
+  "commonApply": "Apply",
+  "@commonApply": {
+    "description": "Generic apply button label"
+  },
+  "commonReset": "Reset",
+  "@commonReset": {
+    "description": "Generic reset button label"
+  },
 
   "routeNotFound": "Page not found",
   "@routeNotFound": {

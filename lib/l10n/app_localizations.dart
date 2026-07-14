@@ -464,6 +464,42 @@ abstract class AppLocalizations {
   /// **'Updated at'**
   String get todoDetailUpdatedAt;
 
+  /// Label for the create-task action (FAB) and the create sheet title
+  ///
+  /// In en, this message translates to:
+  /// **'New task'**
+  String get todoNewTask;
+
+  /// Snackbar after a successful create
+  ///
+  /// In en, this message translates to:
+  /// **'Task created'**
+  String get todoCreateSuccess;
+
+  /// Button that clears all active search filters
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get todoClearFilters;
+
+  /// Filter sheet title and filter button tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get todoFilters;
+
+  /// Generic apply button label
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get commonApply;
+
+  /// Generic reset button label
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get commonReset;
+
   /// Message shown by the router error page for an unknown route
   ///
   /// In en, this message translates to:

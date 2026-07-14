@@ -10,8 +10,8 @@ import "package:todo_app_v1/features/todo/domain/index.dart";
 import "package:todo_app_v1/features/todo/widgets/index.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
 
-/// 任务列表页（承载 home 路由）：搜索 + 类型/状态筛选 + 下拉刷新 + 上拉加载，
-/// 列表项支持进详情 / 编辑 / 删除。AppBar 提供登出入口。
+/// 任务列表页（承载 home 路由）：搜索 + 类型/状态筛选（各项可清空）+ 下拉刷新 +
+/// 上拉加载，列表项支持进详情 / 编辑 / 删除，右下角新建。AppBar 提供登出入口。
 class TodoListScreen extends ConsumerStatefulWidget {
   const TodoListScreen({super.key});
 
@@ -22,6 +22,9 @@ class TodoListScreen extends ConsumerStatefulWidget {
 class _TodoListScreenState extends ConsumerState<TodoListScreen> {
   final _searchController = TextEditingController();
   final _scrollController = ScrollController();
+
+  // 已生效的筛选维度（区别于搜索框「输入中」的文本）。
+  String _submittedName = "";
   TodoType? _type;
   TodoStatus? _status;
 
@@ -38,24 +41,46 @@ class _TodoListScreenState extends ConsumerState<TodoListScreen> {
     super.dispose();
   }
 
+  TodoListController get _controller =>
+      ref.read(todoListControllerProvider.notifier);
+
   /// 接近底部时触发上拉加载（控制器内部已做「无更多 / 加载中」的防重）。
   void _onScroll() {
     final position = _scrollController.position;
     if (position.pixels >= position.maxScrollExtent - WsyAppSpacing.xxl * 4) {
-      _guarded(() => ref.read(todoListControllerProvider.notifier).loadMore());
+      _guarded(() => _controller.loadMore());
     }
   }
 
-  TodoListController get _controller =>
-      ref.read(todoListControllerProvider.notifier);
-
-  void _applyFilters() => _guarded(
+  /// 以当前生效的三个维度重新查询。
+  void _reapply() => _guarded(
     () => _controller.applyFilters(
-      name: _searchController.text.trim(),
+      name: _submittedName.isEmpty ? null : _submittedName,
       type: _type,
       status: _status,
     ),
   );
+
+  void _onSearchSubmitted() {
+    setState(() => _submittedName = _searchController.text.trim());
+    _reapply();
+  }
+
+  void _clearSearch() {
+    _searchController.clear();
+    setState(() => _submittedName = "");
+    _reapply();
+  }
+
+  void _clearAll() {
+    _searchController.clear();
+    setState(() {
+      _submittedName = "";
+      _type = null;
+      _status = null;
+    });
+    _reapply();
+  }
 
   /// 统一执行需提示错误的异步动作：失败以 SnackBar 展示，避免未捕获异常。
   Future<void> _guarded(Future<void> Function() action) async {
@@ -76,7 +101,7 @@ class _TodoListScreenState extends ConsumerState<TodoListScreen> {
       _guarded(() => ref.read(authControllerProvider.notifier).logout());
 
   Future<void> _confirmDelete(Todo todo) async {
-    // 首个 await 前捕获依赖 context 的对象，后续只用捕获值 + mounted 守卫。
+    // 首个 await 前捕获依赖 context 的对象，后续只用捕获值。
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
 
@@ -112,6 +137,21 @@ class _TodoListScreenState extends ConsumerState<TodoListScreen> {
     }
   }
 
+  /// 打开筛选弹层，应用后更新生效维度并重查。
+  Future<void> _openFilterSheet() async {
+    final result = await showTodoFilterSheet(
+      context,
+      type: _type,
+      status: _status,
+    );
+    if (result == null || !mounted) return;
+    setState(() {
+      _type = result.type;
+      _status = result.status;
+    });
+    _reapply();
+  }
+
   void _openDetail(Todo todo) =>
       context.pushNamed(RouteName.todoDetail, pathParameters: {"id": todo.id});
 
@@ -131,6 +171,11 @@ class _TodoListScreenState extends ConsumerState<TodoListScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showTodoEditSheet(context),
+        tooltip: l10n.todoNewTask,
+        child: const Icon(Icons.add),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -139,27 +184,42 @@ class _TodoListScreenState extends ConsumerState<TodoListScreen> {
                 WsyAppSpacing.md,
                 WsyAppSpacing.sm,
                 WsyAppSpacing.md,
-                0,
+                WsyAppSpacing.sm,
               ),
               child: Column(
                 spacing: WsyAppSpacing.sm,
                 children: [
-                  TodoSearchBar(
-                    controller: _searchController,
-                    onSubmitted: (_) => _applyFilters(),
-                    onCleared: _applyFilters,
+                  Row(
+                    spacing: WsyAppSpacing.sm,
+                    children: [
+                      Expanded(
+                        child: TodoSearchBar(
+                          controller: _searchController,
+                          onSubmitted: (_) => _onSearchSubmitted(),
+                          onCleared: _clearSearch,
+                        ),
+                      ),
+                      IconButton.filledTonal(
+                        tooltip: l10n.todoFilters,
+                        icon: const Icon(Icons.tune),
+                        onPressed: _openFilterSheet,
+                      ),
+                    ],
                   ),
-                  TodoFilterBar(
+                  _ActiveFilters(
+                    name: _submittedName,
                     type: _type,
                     status: _status,
-                    onTypeChanged: (v) {
-                      setState(() => _type = v);
-                      _applyFilters();
+                    onClearName: _clearSearch,
+                    onClearType: () {
+                      setState(() => _type = null);
+                      _reapply();
                     },
-                    onStatusChanged: (v) {
-                      setState(() => _status = v);
-                      _applyFilters();
+                    onClearStatus: () {
+                      setState(() => _status = null);
+                      _reapply();
                     },
+                    onClearAll: _clearAll,
                   ),
                 ],
               ),
@@ -173,13 +233,64 @@ class _TodoListScreenState extends ConsumerState<TodoListScreen> {
                   scrollController: _scrollController,
                   onRefresh: _controller.refresh,
                   onTapItem: _openDetail,
-                  onEditItem: (todo) => showTodoEditSheet(context, todo),
+                  onEditItem: (todo) => showTodoEditSheet(context, todo: todo),
                   onDeleteItem: _confirmDelete,
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// 生效筛选的可删除标签行：每个维度一枚 chip（点 ✕ 单独清空），末尾一键清除全部。
+/// 无任何生效筛选时不占位。
+class _ActiveFilters extends StatelessWidget {
+  const _ActiveFilters({
+    required this.name,
+    required this.type,
+    required this.status,
+    required this.onClearName,
+    required this.onClearType,
+    required this.onClearStatus,
+    required this.onClearAll,
+  });
+
+  final String name;
+  final TodoType? type;
+  final TodoStatus? status;
+  final VoidCallback onClearName;
+  final VoidCallback onClearType;
+  final VoidCallback onClearStatus;
+  final VoidCallback onClearAll;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final hasName = name.isNotEmpty;
+    final hasAny = hasName || type != null || status != null;
+    if (!hasAny) return const SizedBox.shrink();
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Wrap(
+        spacing: WsyAppSpacing.sm,
+        runSpacing: WsyAppSpacing.xs,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          if (hasName)
+            InputChip(label: Text('"$name"'), onDeleted: onClearName),
+          if (type != null)
+            InputChip(label: Text(type!.label(l10n)), onDeleted: onClearType),
+          if (status != null)
+            InputChip(
+              label: Text(status!.label(l10n)),
+              onDeleted: onClearStatus,
+            ),
+          TextButton(onPressed: onClearAll, child: Text(l10n.todoClearFilters)),
+        ],
       ),
     );
   }
@@ -205,6 +316,7 @@ class _TodoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
     if (state.items.isEmpty) {
@@ -214,7 +326,20 @@ class _TodoList extends StatelessWidget {
         child: ListView(
           children: [
             const SizedBox(height: WsyAppSpacing.xxl * 3),
-            Center(child: Text(l10n.todoEmpty)),
+            Icon(
+              Icons.checklist_rounded,
+              size: WsyAppSpacing.xxl,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: WsyAppSpacing.sm),
+            Center(
+              child: Text(
+                l10n.todoEmpty,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
           ],
         ),
       );
@@ -224,7 +349,12 @@ class _TodoList extends StatelessWidget {
       onRefresh: onRefresh,
       child: ListView.builder(
         controller: scrollController,
-        padding: const EdgeInsets.all(WsyAppSpacing.md),
+        padding: const EdgeInsets.fromLTRB(
+          WsyAppSpacing.md,
+          WsyAppSpacing.sm,
+          WsyAppSpacing.md,
+          WsyAppSpacing.md,
+        ),
         // 末尾多一行：有下一页时展示加载指示。
         itemCount: state.items.length + (state.hasNextPage ? 1 : 0),
         itemBuilder: (context, index) {

@@ -130,4 +130,26 @@ class TodoListController extends AsyncNotifier<TodoListState> {
     ref.invalidate(todoDetailProvider(id));
     return updated;
   }
+
+  /// 新建任务：成功后插入列表顶部（与默认「按创建时间倒序」一致）。失败上抛。
+  Future<Todo> create({
+    required String name,
+    required String content,
+    required TodoType type,
+    required TodoStatus status,
+  }) async {
+    final created = await _repo.create(
+      name: name,
+      content: content,
+      type: type,
+      status: status,
+    );
+    final current = state.value;
+    if (current != null) {
+      state = AsyncData(
+        current.copyWith(items: _visible([created, ...current.items])),
+      );
+    }
+    return created;
+  }
 }

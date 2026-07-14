@@ -9,8 +9,9 @@ import "package:todo_app_v1/features/todo/widgets/todo_labels.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
 import "package:todo_app_v1/shared/widgets/index.dart";
 
-/// 打开编辑任务的底部弹层。返回 `true` 表示保存成功（调用方据此提示 / 刷新）。
-Future<bool?> showTodoEditSheet(BuildContext context, Todo todo) {
+/// 打开新建 / 编辑任务的底部弹层。[todo] 为空表示新建。
+/// 返回 `true` 表示保存成功（调用方据此提示 / 刷新）。
+Future<bool?> showTodoEditSheet(BuildContext context, {Todo? todo}) {
   return showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true, // 配合键盘顶起
@@ -20,9 +21,9 @@ Future<bool?> showTodoEditSheet(BuildContext context, Todo todo) {
 }
 
 class _TodoEditSheet extends ConsumerStatefulWidget {
-  const _TodoEditSheet({required this.todo});
+  const _TodoEditSheet({this.todo});
 
-  final Todo todo;
+  final Todo? todo;
 
   @override
   ConsumerState<_TodoEditSheet> createState() => _TodoEditSheetState();
@@ -37,17 +38,21 @@ class _TodoEditSheetState extends ConsumerState<_TodoEditSheet> {
 
   bool _isSaving = false;
 
+  /// 无 todo 即新建模式。
+  bool get _isCreate => widget.todo == null;
+
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.todo.name);
-    _contentController = TextEditingController(text: widget.todo.content ?? "");
-    // 下拉值必须落在可选项内：非常规枚举（unknown/deleted）回落到默认项。
-    _type = kSelectableTodoTypes.contains(widget.todo.type)
-        ? widget.todo.type
+    final todo = widget.todo;
+    _nameController = TextEditingController(text: todo?.name ?? "");
+    _contentController = TextEditingController(text: todo?.content ?? "");
+    // 下拉值必须落在可选项内：新建给默认项，编辑遇非常规枚举（unknown/deleted）也回落。
+    _type = (todo != null && kSelectableTodoTypes.contains(todo.type))
+        ? todo.type
         : TodoType.normal;
-    _status = kSelectableTodoStatuses.contains(widget.todo.status)
-        ? widget.todo.status
+    _status = (todo != null && kSelectableTodoStatuses.contains(todo.status))
+        ? todo.status
         : TodoStatus.pending;
   }
 
@@ -68,18 +73,34 @@ class _TodoEditSheetState extends ConsumerState<_TodoEditSheet> {
 
     setState(() => _isSaving = true);
     try {
-      await ref
-          .read(todoListControllerProvider.notifier)
-          .save(
-            id: widget.todo.id,
-            name: _nameController.text.trim(),
-            content: _contentController.text.trim(),
-            type: _type,
-            status: _status,
-          );
+      final notifier = ref.read(todoListControllerProvider.notifier);
+      final name = _nameController.text.trim();
+      final content = _contentController.text.trim();
+      if (_isCreate) {
+        await notifier.create(
+          name: name,
+          content: content,
+          type: _type,
+          status: _status,
+        );
+      } else {
+        await notifier.save(
+          id: widget.todo!.id,
+          name: name,
+          content: content,
+          type: _type,
+          status: _status,
+        );
+      }
       messenger
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(l10n.todoSaveSuccess)));
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              _isCreate ? l10n.todoCreateSuccess : l10n.todoSaveSuccess,
+            ),
+          ),
+        );
       navigator.pop(true);
     } on Object catch (e) {
       if (!mounted) return;
@@ -112,7 +133,10 @@ class _TodoEditSheetState extends ConsumerState<_TodoEditSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: WsyAppSpacing.md,
           children: [
-            Text(l10n.todoEditTitle, style: theme.textTheme.titleLarge),
+            Text(
+              _isCreate ? l10n.todoNewTask : l10n.todoEditTitle,
+              style: theme.textTheme.titleLarge,
+            ),
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(labelText: l10n.todoFieldName),

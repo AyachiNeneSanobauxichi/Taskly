@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:todo_app_v1/core/theme/index.dart";
 import "package:todo_app_v1/features/todo/domain/index.dart";
-import "package:todo_app_v1/features/todo/widgets/todo_labels.dart";
+import "package:todo_app_v1/features/todo/widgets/todo_visuals.dart";
 import "package:todo_app_v1/l10n/app_localizations.dart";
 
-/// 任务列表项：点击名称进详情，尾部菜单提供编辑 / 删除。
+/// 任务列表项：类型头像 + 名称/内容/状态徽章，点击名称进详情，尾部菜单编辑 / 删除。
 class TodoListItem extends StatelessWidget {
   const TodoListItem({
     super.key,
@@ -22,92 +22,104 @@ class TodoListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
     final content = todo.content;
 
     return Card(
-      child: ListTile(
+      clipBehavior: Clip.hardEdge,
+      margin: const EdgeInsets.only(bottom: WsyAppSpacing.sm),
+      child: InkWell(
         onTap: onTap,
-        title: Text(todo.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (content != null && content.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(bottom: WsyAppSpacing.xs),
-                child: Text(
-                  content,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+        child: Padding(
+          padding: const EdgeInsets.all(WsyAppSpacing.md),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: WsyAppSpacing.md,
+            children: [
+              TodoTypeAvatar(type: todo.type),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: WsyAppSpacing.xxs,
+                  children: [
+                    Text(
+                      todo.name,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (content != null && content.isNotEmpty)
+                      Text(
+                        content,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: WsyAppSpacing.xs),
+                      child: todoStatusBadge(context, todo.status),
+                    ),
+                  ],
                 ),
               ),
-            Row(
-              spacing: WsyAppSpacing.xs,
-              children: [
-                _Tag(text: todo.type.label(l10n), color: _typeColor(theme)),
-                _Tag(
-                  text: todo.status.label(l10n),
-                  color: theme.colorScheme.secondaryContainer,
-                  onColor: theme.colorScheme.onSecondaryContainer,
-                ),
-              ],
-            ),
-          ],
-        ),
-        trailing: PopupMenuButton<_ItemAction>(
-          onSelected: (action) => switch (action) {
-            _ItemAction.edit => onEdit(),
-            _ItemAction.delete => onDelete(),
-          },
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: _ItemAction.edit,
-              child: Text(l10n.todoActionEdit),
-            ),
-            PopupMenuItem(
-              value: _ItemAction.delete,
-              child: Text(l10n.todoActionDelete),
-            ),
-          ],
+              _MoreMenu(onEdit: onEdit, onDelete: onDelete),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  /// 按类型区分标签底色：urgent→error，important→tertiary，其余→primary 容器色。
-  Color _typeColor(ThemeData theme) => switch (todo.type) {
-    TodoType.urgent => theme.colorScheme.errorContainer,
-    TodoType.important => theme.colorScheme.tertiaryContainer,
-    _ => theme.colorScheme.primaryContainer,
-  };
 }
 
 enum _ItemAction { edit, delete }
 
-/// 小标签：展示类型 / 状态。
-class _Tag extends StatelessWidget {
-  const _Tag({required this.text, required this.color, this.onColor});
+/// 编辑 / 删除菜单（删除项以 error 色强调）。
+class _MoreMenu extends StatelessWidget {
+  const _MoreMenu({required this.onEdit, required this.onDelete});
 
-  final String text;
-  final Color color;
-  final Color? onColor;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: WsyAppSpacing.sm,
-        vertical: WsyAppSpacing.xxs,
-      ),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(WsyAppSpacing.xs),
-      ),
-      child: Text(
-        text,
-        style: theme.textTheme.labelSmall?.copyWith(color: onColor),
-      ),
+    final l10n = AppLocalizations.of(context);
+    return PopupMenuButton<_ItemAction>(
+      icon: const Icon(Icons.more_vert),
+      onSelected: (action) => switch (action) {
+        _ItemAction.edit => onEdit(),
+        _ItemAction.delete => onDelete(),
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: _ItemAction.edit,
+          child: Row(
+            spacing: WsyAppSpacing.sm,
+            children: [
+              const Icon(Icons.edit_outlined),
+              Text(l10n.todoActionEdit),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: _ItemAction.delete,
+          child: Row(
+            spacing: WsyAppSpacing.sm,
+            children: [
+              Icon(Icons.delete_outline, color: theme.colorScheme.error),
+              Text(
+                l10n.todoActionDelete,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
